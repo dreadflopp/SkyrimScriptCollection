@@ -21,15 +21,16 @@ setMagicDisallowEnchanting = false;
 // on how much the enchanted versions value should be multiplied (integer or real (aka float))
 enchantedValueMultiplier = 1;
 // Heavy Armory Tweaks
-HeavyArmoryTweaks = false;
+HeavyArmoryTweaks = true;
+HeavyArmoryLiteTweaks = false;
 // Animated Armoury Tweaks
-AnimatedArmouryTweaks = true;
+AnimatedArmouryTweaks = false;
 // Skyrim Spear Mechanic tweaks
 SSMTweaks = false;
 // waccf
 waccf = false;
 // hllr
-hllr = false;
+hllr = true;
 
 var
 pluginGenerated, pluginSelected, keywordQS: IInterface;
@@ -605,7 +606,7 @@ begin
 	if (hllr = true) then
 	begin
 		normalListLowMid := createList('LItemEnchWeapon' + weaponType + 'LowMid');
-		normalLnormalListMidist := createList('LItemEnchWeapon' + weaponType + 'Mid');
+		normalListMid := createList('LItemEnchWeapon' + weaponType + 'Mid');
 	end;
 	
 	// Add to level lists
@@ -625,7 +626,7 @@ begin
 		addToLeveledList(dlc2BestList, LItemEnchMaterialWeapon, 1);
 		if (hllr = true) then 
 		begin
-			normalListLowMid(dlc2BestList, LItemEnchMaterialWeapon, 1);			
+			addToLeveledList(normalListLowMid, LItemEnchMaterialWeapon, 1);			
 		end;
 	end 
 	else if material = 'Steel' then
@@ -646,7 +647,8 @@ begin
 			addToLeveledList(dlc2SpecialList, LItemEnchMaterialWeapon, 1);
 			if (hllr = true) then 
 			begin
-				normalListLowMid(dlc2BestList, LItemEnchMaterialWeapon, 2);			
+				addToLeveledList(normalListLowMid, LItemEnchMaterialWeapon, 1);
+				addToLeveledList(normalListLowMid, LItemEnchMaterialWeapon, 1);
 			end;
 		end		
 		else
@@ -662,7 +664,7 @@ begin
 			addToLeveledList(dlc2SpecialList, LItemEnchMaterialWeapon, 4);
 			if (hllr = true) then 
 			begin
-				normalListLowMid(dlc2BestList, LItemEnchMaterialWeapon, 1);			
+				addToLeveledList(normalListLowMid, LItemEnchMaterialWeapon, 1);	
 			end;
 		end;		
 	end 
@@ -689,8 +691,8 @@ begin
 		end;
 		if (hllr = true) then 
 		begin
-			normalListLowMid(dlc2BestList, LItemEnchMaterialWeapon, 1);			
-			normalListMid(dlc2BestList, LItemEnchMaterialWeapon, 1);		
+			addToLeveledList(normalListLowMid, LItemEnchMaterialWeapon, 1);		
+			addToLeveledList(normalListMid, LItemEnchMaterialWeapon, 1);
 		end;
 	end
 	else if material = 'Dwarven' then 
@@ -715,8 +717,8 @@ begin
 		end;
 		if (hllr = true) then 
 		begin
-			normalListLowMid(dlc2BestList, LItemEnchMaterialWeapon, 1);			
-			normalListMid(dlc2BestList, LItemEnchMaterialWeapon, 1);		
+			addToLeveledList(normalListLowMid, LItemEnchMaterialWeapon, 1);
+			addToLeveledList(normalListMid, LItemEnchMaterialWeapon, 1);		
 		end;
 	end
 	else if material = 'Nordic' then 
@@ -746,8 +748,8 @@ begin
 		end;
 		if (hllr = true) then 
 		begin
-			normalListLowMid(dlc2BestList, LItemEnchMaterialWeapon, 1);			
-			normalListMid(dlc2BestList, LItemEnchMaterialWeapon, 1);		
+			addToLeveledList(normalListLowMid, LItemEnchMaterialWeapon, 1);
+			addToLeveledList(normalListMid, LItemEnchMaterialWeapon, 1);	
 		end;
 	end
 	else if material = 'Glass' then 
@@ -1095,7 +1097,7 @@ begin
 		Exit;
 	end;
 	
-	// bali if ssm and
+	// bail if ssm and
 	if SSMTweaks = true then
 	begin
 		if (weaponType = 'Javelin') then
@@ -1107,7 +1109,17 @@ begin
 		if (Pos('Elder', GetElementEditValues(selectedRecord, 'EDID')) > 0) then
 		Exit;
 	end;
-	
+
+	// bail if halite and
+	if HeavyArmoryLiteTweaks = true then
+	begin
+		if (weaponType = 'Quarterstaff') then
+		Exit;
+		
+		if (weaponType = 'Trident') then
+		Exit;
+	end;
+
 	material := getMainMaterialShort(selectedRecord);
 	if (material = 'Blades') OR (material = 'Draugr') OR (material = 'DraugrHoned') OR (material = 'Dawnguard') OR (material = 'Falmer') OR (material = 'FalmerHoned') OR (material = 'Forsworn') OR (material = 'Redguard') OR (material = 'Silver') OR (material = 'Skyforge') OR (material = 'Imperial') OR (material = 'Dragonbone') OR (material = 'Skip_ench') then
 	Exit;	
