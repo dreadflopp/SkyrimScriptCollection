@@ -1216,7 +1216,7 @@ begin
 		charge4 := 2000;
 		charge5 := 2500;
 		charge6 := 0;
-	end
+	end	
 	else if material = 'Glass' then
 	begin
 		tier1 := 0;
@@ -1276,51 +1276,55 @@ begin
 		charge4 := 2000;
 		charge5 := 2500;
 		charge6 := 3000;
-	end
-	else if (material = 'Draugr') OR (material = 'DraugrHoned')then
+	end;
+
+	if (waccf = true) then
 	begin
-		tier1 := 0;
-		tier2 := 0;
-		tier3 := 0;
-		tier4 := 0;
-		tier5 := 0;
-		tier6 := 0;
-		charge1 := 0;
-		charge2 := 0;
-		charge3 := 0;
-		charge4 := 0;
-		charge5 := 0;
-		charge6 := 0;
-	end
-	else if (material = 'Falmer') OR (material = 'FalmerHoned') then
-	begin
-		tier1 := 0;
-		tier2 := 0;
-		tier3 := 0;
-		tier4 := 0;
-		tier5 := 0;
-		tier6 := 0;
-		charge1 := 0;
-		charge2 := 0;
-		charge3 := 0;
-		charge4 := 0;
-		charge5 := 0;
-		charge6 := 0;
-	end
-	else if material = 'Dragonbone' then
-	begin
-		tier1 := 0;
-		tier2 := 0;
-		tier3 := 0;
-		tier4 := 0;
-		tier5 := 0;
-		tier6 := 0;
-		charge1 := 0;
-		charge2 := 0;
-		charge3 := 0;
-		charge4 := 0;
-		charge5 := 0;
-		charge6 := 0;
+		if material = 'Elven' then
+		begin
+			tier1 := 0;
+			tier2 := 13;
+			tier3 := 15;
+			tier4 := 17;
+			tier5 := 0;
+			tier6 := 0;
+			charge1 := 0;
+			charge2 := 1000;
+			charge3 := 1500;
+			charge4 := 2000;
+			charge5 := 0;
+			charge6 := 0;
+		end
+		else if material = 'Dwarven' then
+		begin
+			tier1 := 0;
+			tier2 := 7;
+			tier3 := 9;
+			tier4 := 11;
+			tier5 := 0;
+			tier6 := 0;
+			charge1 := 0;
+			charge2 := 1000;
+			charge3 := 1500;
+			charge4 := 2000;
+			charge5 := 0;
+			charge6 := 0;
+		end
+		else if (material = 'Orcish') then
+		begin
+			tier1 := 0;
+			tier2 := 0;
+			tier3 := 20;
+			tier4 := 22;
+			tier5 := 25;
+			tier6 := 0;
+			charge1 := 0;
+			charge2 := 0;
+			charge3 := 1500;
+			charge4 := 2000;
+			charge5 := 2500;
+			charge6 := 0;
+		end
 	end;
 	
 	enchType := 'AbsorbH';
@@ -1515,51 +1519,55 @@ begin
 		charge4 := 2000;
 		charge5 := 2500;
 		charge6 := 3000;
-	end
-	else if (material = 'Draugr') OR (material = 'DraugrHoned')then
+	end;
+
+	if (waccf = true) then
 	begin
-		tier1 := 0;
-		tier2 := 0;
-		tier3 := 0;
-		tier4 := 0;
-		tier5 := 0;
-		tier6 := 0;
-		charge1 := 0;
-		charge2 := 0;
-		charge3 := 0;
-		charge4 := 0;
-		charge5 := 0;
-		charge6 := 0;
-	end
-	else if (material = 'Falmer') OR (material = 'FalmerHoned') then
-	begin
-		tier1 := 0;
-		tier2 := 0;
-		tier3 := 0;
-		tier4 := 0;
-		tier5 := 0;
-		tier6 := 0;
-		charge1 := 0;
-		charge2 := 0;
-		charge3 := 0;
-		charge4 := 0;
-		charge5 := 0;
-		charge6 := 0;
-	end
-	else if material = 'Dragonbone' then
-	begin
-		tier1 := 0;
-		tier2 := 0;
-		tier3 := 0;
-		tier4 := 0;
-		tier5 := 0;
-		tier6 := 0;
-		charge1 := 0;
-		charge2 := 0;
-		charge3 := 0;
-		charge4 := 0;
-		charge5 := 0;
-		charge6 := 0;
+		if material = 'Elven' then
+		begin
+			tier1 := 0;
+			tier2 := 0;
+			tier3 := 0;
+			tier4 := 0;
+			tier5 := 0;
+			tier6 := 0;
+			charge1 := 0;
+			charge2 := 0;
+			charge3 := 0;
+			charge4 := 0;
+			charge5 := 0;
+			charge6 := 0;
+		end
+		else if material = 'Dwarven' then
+		begin
+			tier1 := 0;
+			tier2 := 0;
+			tier3 := 0;
+			tier4 := 0;
+			tier5 := 0;
+			tier6 := 0;
+			charge1 := 0;
+			charge2 := 0;
+			charge3 := 0;
+			charge4 := 0;
+			charge5 := 0;
+			charge6 := 0;
+		end
+		else if (material = 'Orcish') then
+		begin
+			tier1 := 0;
+			tier2 := 0;
+			tier3 := 0;
+			tier4 := 22;
+			tier5 := 25;
+			tier6 := 0;
+			charge1 := 0;
+			charge2 := 0;
+			charge3 := 0;
+			charge4 := 2000;
+			charge5 := 2500;
+			charge6 := 0;
+		end
 	end;
 	
 	// Banish
@@ -1751,52 +1759,7 @@ begin
 		charge4 := 0;
 		charge5 := 0;
 		charge6 := 0;
-	end
-	else if (material = 'Draugr') OR (material = 'DraugrHoned')then
-	begin
-		tier1 := 0;
-		tier2 := 0;
-		tier3 := 0;
-		tier4 := 0;
-		tier5 := 0;
-		tier6 := 0;
-		charge1 := 0;
-		charge2 := 0;
-		charge3 := 0;
-		charge4 := 0;
-		charge5 := 0;
-		charge6 := 0;
-	end
-	else if (material = 'Falmer') OR (material = 'FalmerHoned') then
-	begin
-		tier1 := 0;
-		tier2 := 0;
-		tier3 := 0;
-		tier4 := 0;
-		tier5 := 0;
-		tier6 := 0;
-		charge1 := 0;
-		charge2 := 0;
-		charge3 := 0;
-		charge4 := 0;
-		charge5 := 0;
-		charge6 := 0;
-	end
-	else if material = 'Dragonbone' then
-	begin
-		tier1 := 0;
-		tier2 := 0;
-		tier3 := 0;
-		tier4 := 0;
-		tier5 := 0;
-		tier6 := 0;
-		charge1 := 0;
-		charge2 := 0;
-		charge3 := 0;
-		charge4 := 0;
-		charge5 := 0;
-		charge6 := 0;
-	end;
+	end;	
 	
 	enchType := 'Chaos';
 	if (tier1 > 0) OR (tier2 > 0) OR (tier3 > 0) OR (tier4 > 0) OR (tier5 > 0) OR (tier6 > 0) then
@@ -1959,51 +1922,55 @@ begin
 		charge4 := 2000;
 		charge5 := 2500;
 		charge6 := 3000;
-	end
-	else if (material = 'Draugr') OR (material = 'DraugrHoned')then
+	end;
+
+	if (waccf = true) then
 	begin
-		tier1 := 0;
-		tier2 := 0;
-		tier3 := 20;
-		tier4 := 22;
-		tier5 := 25;
-		tier6 := 0;
-		charge1 := 0;
-		charge2 := 0;
-		charge3 := 1500;
-		charge4 := 2000;
-		charge5 := 2500;
-		charge6 := 0;
-	end
-	else if (material = 'Falmer') OR (material = 'FalmerHoned') then
-	begin
-		tier1 := 0;
-		tier2 := 0;
-		tier3 := 0;
-		tier4 := 0;
-		tier5 := 0;
-		tier6 := 0;
-		charge1 := 0;
-		charge2 := 0;
-		charge3 := 0;
-		charge4 := 0;
-		charge5 := 0;
-		charge6 := 0;
-	end
-	else if material = 'Dragonbone' then
-	begin
-		tier1 := 0;
-		tier2 := 0;
-		tier3 := 0;
-		tier4 := 0;
-		tier5 := 0;
-		tier6 := 0;
-		charge1 := 0;
-		charge2 := 0;
-		charge3 := 0;
-		charge4 := 0;
-		charge5 := 0;
-		charge6 := 0;
+		if material = 'Elven' then
+		begin
+			tier1 := 0;
+			tier2 := 13;
+			tier3 := 15;
+			tier4 := 17;
+			tier5 := 0;
+			tier6 := 0;
+			charge1 := 0;
+			charge2 := 1000;
+			charge3 := 1500;
+			charge4 := 2000;
+			charge5 := 0;
+			charge6 := 0;
+		end
+		else if material = 'Dwarven' then
+		begin
+			tier1 := 0;
+			tier2 := 7;
+			tier3 := 9;
+			tier4 := 11;
+			tier5 := 0;
+			tier6 := 0;
+			charge1 := 0;
+			charge2 := 1000;
+			charge3 := 1500;
+			charge4 := 2000;
+			charge5 := 0;
+			charge6 := 0;
+		end
+		else if (material = 'Orcish') then
+		begin
+			tier1 := 0;
+			tier2 := 0;
+			tier3 := 20;
+			tier4 := 22;
+			tier5 := 25;
+			tier6 := 0;
+			charge1 := 0;
+			charge2 := 0;
+			charge3 := 1500;
+			charge4 := 2000;
+			charge5 := 2500;
+			charge6 := 0;
+		end
 	end;
 	
 	// Fear
