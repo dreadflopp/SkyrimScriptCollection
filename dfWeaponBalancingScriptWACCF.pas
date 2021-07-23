@@ -1,4 +1,4 @@
-unit dfWeaponBalancingScript;
+unit dfWeaponBalancingScriptWACCF;
 
 uses mteFunctions, dfFunctions; 
 
@@ -23,16 +23,15 @@ begin
     else if material = 'Steel' then begin offset := 1; end
     else if material = 'Silver' then begin offset := 1; end
     else if material = 'Draugr' then begin offset := 1; end
-    else if material = 'Imperial' then begin offset := 2; end
-    else if material = 'Orcish' then begin offset := 2; end
+    else if material = 'Imperial' then begin offset := 1; end
+    else if material = 'Orcish' then begin offset := 4; end
     else if material = 'DragonPriest' then begin offset := 2; end
-    else if material = 'Dwarven' then begin offset := 3; end
+    else if material = 'Dwarven' then begin offset := 2; end
     else if material = 'Falmer' then begin offset := 3; end
-    else if material = 'Forsworn' then begin offset := 3; end
+    else if material = 'Forsworn' then begin offset := 2; end
     else if material = 'Dawnguard' then begin offset := 3; end
-    else if material = 'Nordhero' then begin offset := 4; end
     else if material = 'Skyforge' then begin offset := 4; end
-    else if material = 'Elven' then begin offset := 4; end 
+    else if material = 'Elven' then begin offset := 3; end 
     else if material = 'Nordic' then begin offset := 4; end
     else if material = 'Blades' then begin offset := 4; end
     else if material = 'DraugrHoned' then begin offset := 4; end
@@ -41,15 +40,9 @@ begin
     else if material = 'FalmerHoned' then begin offset := 5; end
     else if material = 'Ebony' then begin offset := 6; end
     else if material = 'Stalhrim' then begin offset := 6; end
-    else if material = 'Tempest' then begin offset := 6; end
-    else if material = 'Daedric' then begin offset := 7; end
-    else if material = 'Dragonbone' then begin offset := 8; end
+    else if material = 'Daedric' then begin offset := 8; end
+    else if material = 'Dragonbone' then begin offset := 7; end
     else begin AddMessage('Failed to set offset for weapon ' + geev(rec, 'EDID')); end;
-  
-  if isOneHanded(getType(rec)) = false then begin
-    if not (material = 'Iron') then offset := (offset + 1);
-    if ((material = 'Stalhrim') OR (material = 'Daedric') OR (material = 'Dragonbone')) then  offset := (offset + 1);
-  end;
 
   if (getType(rec) = 'Whip') OR (getType(rec) = 'Claw') then
   begin
@@ -121,6 +114,7 @@ var
       seevi(rec, 'DATA\Damage', 7 + GetDamageOffset(rec));
       seevi(rec, 'CRDT\Damage', geevi(rec,'DATA\Damage') div 2);
     end;
+
      mess('...is shortsword?');
     // changes Shortswords
     if (pos('Shortsword', itemName) > 0) then begin
@@ -131,7 +125,7 @@ var
       seevi(rec, 'DATA\Damage', 6 + GetDamageOffset(rec));
       seevi(rec, 'CRDT\Damage', geevi(rec,'DATA\Damage') div 2);
     end;
-   if (pos('Wakizashi', itemName) > 0) OR (pos('Blades Shortsword', itemName) > 0)then begin
+    if (pos('Wakizashi', itemName) > 0) OR (pos('Blades Shortsword', itemName) > 0)then begin
       mess('changing' + itemName);
       seev(rec, 'DNAM\Speed', '1.2');
       seev(rec, 'DNAM\Reach', '0.85');
@@ -139,7 +133,6 @@ var
       seevi(rec, 'DATA\Damage', 6 + GetDamageOffset(rec));
       seevi(rec, 'CRDT\Damage', geevi(rec,'DATA\Damage') div 2);
     end;
-
 
      // changes Rapiers
       mess('...is rapier?');
@@ -241,18 +234,18 @@ var
     mess('...is greatsword?');
     if (pos('Greatsword', itemName) > 0) then begin
       mess('changing' + itemName);
-      seev(rec, 'DNAM\Speed', '0.75');
+      seev(rec, 'DNAM\Speed', '0.8');
       seev(rec, 'DNAM\Reach', '1.3');
       seev(rec, 'DNAM\Stagger', '1.1');
-      seevi(rec, 'DATA\Damage', 15 + GetDamageOffset(rec));
+      seevi(rec, 'DATA\Damage', 16 + GetDamageOffset(rec));
       seevi(rec, 'CRDT\Damage', geevi(rec,'DATA\Damage') div 2);
     end;
     if (pos('Dai-Katana', itemName) > 0) OR (pos('Blades Greatsword', itemName) > 0)then begin
       mess('changing' + itemName);
-      seev(rec, 'DNAM\Speed', '0.85');
+      seev(rec, 'DNAM\Speed', '0.9');
       seev(rec, 'DNAM\Reach', '1.3');
       seev(rec, 'DNAM\Stagger', '1.0');
-      seevi(rec, 'DATA\Damage', 15 + GetDamageOffset(rec));
+      seevi(rec, 'DATA\Damage', 16 + GetDamageOffset(rec));
       seevi(rec, 'CRDT\Damage', geevi(rec,'DATA\Damage') div 2);
       end;
 
@@ -263,7 +256,7 @@ var
       seev(rec, 'DNAM\Speed', '0.8');
       seev(rec, 'DNAM\Reach', '1.4');
       seev(rec, 'DNAM\Stagger', '0.3');
-      seevi(rec, 'DATA\Damage', 13 + GetDamageOffset(rec));
+      seevi(rec, 'DATA\Damage', 14 + GetDamageOffset(rec));
       seevi(rec, 'CRDT\Damage',  9 + (GetDamageOffset(rec) div 2));
     end;
 
@@ -274,7 +267,7 @@ var
       seev(rec, 'DNAM\Speed', '0.75');
       seev(rec, 'DNAM\Reach', '1.45');
       seev(rec, 'DNAM\Stagger', '0.65');
-      seevi(rec, 'DATA\Damage', 13 + GetDamageOffset(rec));
+      seevi(rec, 'DATA\Damage', 14 + GetDamageOffset(rec));
       seevi(rec, 'CRDT\Damage', geevi(rec,'DATA\Damage') div 2);
     end;
     if (pos('Blades Glaive', itemName) > 0) OR (pos('Akaviri Glaive', itemName) > 0) then begin
@@ -293,7 +286,7 @@ var
       seev(rec, 'DNAM\Speed', '0.75');
       seev(rec, 'DNAM\Reach', '1.4');
       seev(rec, 'DNAM\Stagger', '0.5');
-      seevi(rec, 'DATA\Damage', 14 + GetDamageOffset(rec));
+      seevi(rec, 'DATA\Damage', 15 + GetDamageOffset(rec));
       seevi(rec, 'CRDT\Damage',  10 + (GetDamageOffset(rec) div 2));
     end;
 
@@ -304,7 +297,7 @@ var
       seev(rec, 'DNAM\Speed', '0.7');
       seev(rec, 'DNAM\Reach', '1.65');
       seev(rec, 'DNAM\Stagger', '0.4');
-      seevi(rec, 'DATA\Damage', 12 + GetDamageOffset(rec));
+      seevi(rec, 'DATA\Damage', 13 + GetDamageOffset(rec));
       seevi(rec, 'CRDT\Damage', 9 + (GetDamageOffset(rec) div 2));
     end;
 
@@ -315,7 +308,7 @@ var
       seev(rec, 'DNAM\Speed', '0.7');
       seev(rec, 'DNAM\Reach', '1.3');
       seev(rec, 'DNAM\Stagger', '1.15');
-      seevi(rec, 'DATA\Damage', 16 + GetDamageOffset(rec));
+      seevi(rec, 'DATA\Damage', 17 + GetDamageOffset(rec));
       seevi(rec, 'CRDT\Damage', geevi(rec,'DATA\Damage') div 2);
     end;
 
@@ -326,7 +319,7 @@ var
       seev(rec, 'DNAM\Speed', '0.7');
       seev(rec, 'DNAM\Reach', '1.4');
       seev(rec, 'DNAM\Stagger', '1.05');
-      seevi(rec, 'DATA\Damage', 15 + GetDamageOffset(rec));
+      seevi(rec, 'DATA\Damage', 16 + GetDamageOffset(rec));
       seevi(rec, 'CRDT\Damage', geevi(rec,'DATA\Damage') div 2);
     end;
 
@@ -337,7 +330,7 @@ var
       seev(rec, 'DNAM\Speed', '0.65');
       seev(rec, 'DNAM\Reach', '1.55');
       seev(rec, 'DNAM\Stagger', '0.9');
-      seevi(rec, 'DATA\Damage', 14 + GetDamageOffset(rec));
+      seevi(rec, 'DATA\Damage', 15 + GetDamageOffset(rec));
       seevi(rec, 'CRDT\Damage', geevi(rec,'DATA\Damage') div 2);
     end;
 
@@ -348,7 +341,7 @@ var
       seev(rec, 'DNAM\Speed', '0.6');
       seev(rec, 'DNAM\Reach', '1.3');
       seev(rec, 'DNAM\Stagger', '1.25');
-      seevi(rec, 'DATA\Damage', 18 + GetDamageOffset(rec));
+      seevi(rec, 'DATA\Damage', 19 + GetDamageOffset(rec));
       seevi(rec, 'CRDT\Damage', geevi(rec,'DATA\Damage') div 2);
     end;
 
@@ -359,7 +352,7 @@ var
       seev(rec, 'DNAM\Speed', '0.65');
       seev(rec, 'DNAM\Reach', '1.3');
       seev(rec, 'DNAM\Stagger', '1.2');
-      seevi(rec, 'DATA\Damage', 17 + GetDamageOffset(rec));
+      seevi(rec, 'DATA\Damage', 18 + GetDamageOffset(rec));
       seevi(rec, 'CRDT\Damage', geevi(rec,'DATA\Damage') div 2);
     end;
 
@@ -370,17 +363,18 @@ var
       seev(rec, 'DNAM\Speed', '1.0');
       seev(rec, 'DNAM\Reach', '1.0');
       seev(rec, 'DNAM\Stagger', '1.0');
-      seevi(rec, 'DATA\Damage', 12 + GetDamageOffset(rec));
+      seevi(rec, 'DATA\Damage', 13 + GetDamageOffset(rec));
       seevi(rec, 'CRDT\Damage', geevi(rec,'DATA\Damage') div 2);
     end;
-     if (pos('Akaviri Short Staff', itemName) > 0) OR (pos('Blades Short Staff', itemName) > 0) then begin
+    if (pos('Akaviri Short Staff', itemName) > 0) OR (pos('Blades Short Staff', itemName) > 0) then begin
       mess('changing' + itemName);
       seev(rec, 'DNAM\Speed', '1.1');
       seev(rec, 'DNAM\Reach', '1.0');
       seev(rec, 'DNAM\Stagger', '0.9');
-      seevi(rec, 'DATA\Damage', 12 + GetDamageOffset(rec));
+      seevi(rec, 'DATA\Damage', 13 + GetDamageOffset(rec));
       seevi(rec, 'CRDT\Damage', geevi(rec,'DATA\Damage') div 2);
     end;
+    
 
     // changes Quartertaffs
     mess('...is quarterstaff?');
@@ -389,7 +383,7 @@ var
       seev(rec, 'DNAM\Speed', '1.0');
       seev(rec, 'DNAM\Reach', '1.2');
       seev(rec, 'DNAM\Stagger', '1.0');
-      seevi(rec, 'DATA\Damage', 11 + GetDamageOffset(rec));
+      seevi(rec, 'DATA\Damage', 12 + GetDamageOffset(rec));
       seevi(rec, 'CRDT\Damage', geevi(rec,'DATA\Damage') div 2);
     end;
 
@@ -446,6 +440,7 @@ var
       if(geevi(rec, 'CRDT\Damage') = 0) then seevi(rec, 'CRDT\Damage', '1');
     end;     
 
+    {
     // adjusts stagger for Stalhrim weapons, in vanilla Stalhrim has 'hidden' bonus of higher stagger value.
     if (pos('Stalhrim Short Staff', itemName) > 0) then seev(rec, 'DNAM\Stagger', '1.1');
     if (pos('Stalhrim Half Pike', itemName) > 0) then seev(rec, 'DNAM\Stagger', '0.35');
@@ -461,6 +456,7 @@ var
     if (pos('Stalhrim Quarterstaff', itemName) > 0) then seev(rec, 'DNAM\Stagger', '1.1');
     if (pos('Stalhrim Claws', itemName) > 0) then seev(rec, 'DNAM\Stagger', '0.05');if (pos('Stalhrim Whip', itemName) > 0) then seev(rec, 'DNAM\Stagger', '0.45');    
      if (pos('Stalhrim Spear', itemName) > 0) then seev(rec, 'DNAM\Stagger', '0.05');if (pos('Stalhrim Whip', itemName) > 0) then seev(rec, 'DNAM\Stagger', '0.35');  
+    }  
   end;
 
 procedure mess(s: string);
