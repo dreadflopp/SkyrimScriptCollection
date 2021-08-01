@@ -1403,7 +1403,7 @@ begin
 	
 	if tier3 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0402C46F', 'Chaos', charge3), tier3);
 	if tier4 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0402C470', 'High Chaos', charge4), tier4);
-	if tier5 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0402C471', 'High Chaos', charge5), tier5);
+	if tier5 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0402C471', 'Extreme Chaos', charge5), tier5);
 	if tier6 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0402C472', 'Ultimate Chaos', charge6), tier6);
 	
 	if material = 'Iron' then
