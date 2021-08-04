@@ -2,6 +2,19 @@ unit dfFunctions;
 
 uses mteFunctions; 
 
+function GetPlugin(PluginName : String): IInterface;
+//function to get the plugin by name
+var
+ i : integer;
+begin
+	for i := 1 to Pred(FileCount) do begin
+		if (GetFileName(FileByIndex(i)) = PluginName) then begin
+			Result := FileByIndex(i);
+			Exit;
+		end;
+	end;
+end;
+
 function isOneHanded(weaponType: string): boolean;
 begin
 	Result := True;

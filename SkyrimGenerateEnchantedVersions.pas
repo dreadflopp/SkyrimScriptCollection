@@ -12,7 +12,7 @@ unit GenerateEnchantedVersions;
 
 interface
 implementation
-uses xEditAPI, Classes, SysUtils, StrUtils, Windows, SkyrimUtils, mtefunctions, dfFunctions;
+uses SkyrimUtils, mtefunctions, dfFunctions;
 
 // =Settings
 const
@@ -21,16 +21,20 @@ setMagicDisallowEnchanting = false;
 // on how much the enchanted versions value should be multiplied (integer or real (aka float))
 enchantedValueMultiplier = 1;
 
-HeavyArmoryTweaks = true;
+HeavyArmoryTweaks = false;
 HeavyArmoryLiteTweaks = false;
-AnimatedArmouryTweaks = false;
+AnimatedArmouryTweaks = true;
 SSMTweaks = false;
 waccf = false;
-hllr = true;
+hllr = false;
+summermyst = true;
+vanilla = false;
+summermyst_filename = 'Summermyst - Enchantments of Skyrim.esp';
 
 var
 pluginGenerated, pluginSelected, keywordQS: IInterface;
 allWeaponTypes: TStringList;
+summermyst_index: string;
 
 
 // creates empty list with name
@@ -636,6 +640,10 @@ begin
 	allWeaponTypes := TStringList.Create;
 	allWeaponTypes.Sorted := True;
 	allWeaponTypes.Duplicates := dupIgnore;
+
+	if (summermyst = true) then
+		summermyst_index := IntToHex(GetLoadOrder(GetPlugin(summermyst_filename)), 2);
+
 	Result := 0;
 end;
 
@@ -651,6 +659,7 @@ i, tier1, tier2, tier3, tier4, tier5, tier6, charge1, charge2, charge3, charge4,
 begin
 	pluginSelected := GetFile(selectedRecord);
 	recordSignature := Signature(selectedRecord);
+	
 	
 	// filter selected records, which are invalid for script
 	if not ((recordSignature = 'WEAP') or (recordSignature = 'ARMO')) then
@@ -670,6 +679,9 @@ begin
 		AddMasterIfMissing(pluginGenerated, 'Dawnguard.esm');
 		AddMasterIfMissing(pluginGenerated, 'Hearthfires.esm');
 		AddMasterIfMissing(pluginGenerated, 'Dragonborn.esm');
+
+		if (summermyst = true) then
+			AddMasterIfMissing(pluginGenerated, summermyst_filename);
 		
 		// If Animated Armoury, add Quarterstaff keyword
 		if AnimatedArmouryTweaks = true then
@@ -756,1163 +768,1341 @@ begin
 	material := getMainMaterialShort(selectedRecord);
 	if (material = 'Blades') OR (material = 'Draugr') OR (material = 'DraugrHoned') OR (material = 'Dawnguard') OR (material = 'Falmer') OR (material = 'FalmerHoned') OR (material = 'Forsworn') OR (material = 'Redguard') OR (material = 'Silver') OR (material = 'Skyforge') OR (material = 'Imperial') OR (material = 'Dragonbone') OR (material = 'Skip_ench') then
 	Exit;	
-	
-	allWeaponTypes.Add(weaponType);
-	
-	// Absorb Health		
-	if material = 'Iron' then
-	begin
-		tier1 := 0;
-		tier2 := 0;
-		tier3 := 0;
-		tier4 := 0;
-		tier5 := 0;
-		tier6 := 0;
-		charge1 := 0;
-		charge2 := 0;
-		charge3 := 0;
-		charge4 := 0;
-		charge5 := 0;
-		charge6 := 0;
-	end
-	else if material = 'Imperial' then
-	begin
-		tier1 := 0;
-		tier2 := 0;
-		tier3 := 0;
-		tier4 := 0;
-		tier5 := 0;
-		tier6 := 0;
-		charge1 := 0;
-		charge2 := 0;
-		charge3 := 0;
-		charge4 := 0;
-		charge5 := 0;
-		charge6 := 0;
-	end
-	else if material = 'Steel' then
-	begin
-		tier1 := 0;
-		tier2 := 0;
-		tier3 := 0;
-		tier4 := 0;
-		tier5 := 0;
-		tier6 := 0;
-		charge1 := 0;
-		charge2 := 0;
-		charge3 := 0;
-		charge4 := 0;
-		charge5 := 0;
-		charge6 := 0;
-	end
-	else if material = 'Dwarven' then
-	begin
-		tier1 := 0;
-		tier2 := 13;
-		tier3 := 15;
-		tier4 := 17;
-		tier5 := 0;
-		tier6 := 0;
-		charge1 := 0;
-		charge2 := 1000;
-		charge3 := 1500;
-		charge4 := 2000;
-		charge5 := 0;
-		charge6 := 0;
-	end
-	else if material = 'Orcish' then
-	begin
-		tier1 := 0;
-		tier2 := 7;
-		tier3 := 9;
-		tier4 := 11;
-		tier5 := 0;
-		tier6 := 0;
-		charge1 := 0;
-		charge2 := 1000;
-		charge3 := 1500;
-		charge4 := 2000;
-		charge5 := 0;
-		charge6 := 0;
-	end
-	else if (material = 'Elven') OR (material='Nordic') then
-	begin
-		tier1 := 0;
-		tier2 := 0;
-		tier3 := 20;
-		tier4 := 22;
-		tier5 := 25;
-		tier6 := 0;
-		charge1 := 0;
-		charge2 := 0;
-		charge3 := 1500;
-		charge4 := 2000;
-		charge5 := 2500;
-		charge6 := 0;
-	end	
-	else if material = 'Glass' then
-	begin
-		tier1 := 0;
-		tier2 := 0;
-		tier3 := 28;
-		tier4 := 31;
-		tier5 := 34;
-		tier6 := 0;
-		charge1 := 0;
-		charge2 := 0;
-		charge3 := 1500;
-		charge4 := 2000;
-		charge5 := 2500;
-		charge6 := 0;
-	end
-	else if (material = 'Stalhrim') then
-	begin
-		tier1 := 0;
-		tier2 := 0;
-		tier3 := 0;
-		tier4 := 36;
-		tier5 := 40;
-		tier6 := 43;
-		charge1 := 0;
-		charge2 := 0;
-		charge3 := 0;
-		charge4 := 2000;
-		charge5 := 2500;
-		charge6 := 3000;
-	end
-	else if (material = 'Ebony') then
-	begin
-		tier1 := 0;
-		tier2 := 0;
-		tier3 := 0;
-		tier4 := 37;
-		tier5 := 40;
-		tier6 := 43;
-		charge1 := 0;
-		charge2 := 0;
-		charge3 := 0;
-		charge4 := 2000;
-		charge5 := 2500;
-		charge6 := 3000;
-	end
-	else if material = 'Daedric' then
-	begin
-		tier1 := 0;
-		tier2 := 0;
-		tier3 := 0;
-		tier4 := 47;
-		tier5 := 50;
-		tier6 := 53;
-		charge1 := 0;
-		charge2 := 0;
-		charge3 := 0;
-		charge4 := 2000;
-		charge5 := 2500;
-		charge6 := 3000;
-	end;
 
-	if (waccf = true) then
+	if (summermyst = true) then
 	begin
-		if material = 'Elven' then
-		begin
-			tier1 := 0;
-			tier2 := 13;
-			tier3 := 15;
-			tier4 := 17;
-			tier5 := 0;
-			tier6 := 0;
-			charge1 := 0;
-			charge2 := 1000;
-			charge3 := 1500;
-			charge4 := 2000;
-			charge5 := 0;
-			charge6 := 0;
-		end
-		else if material = 'Dwarven' then
-		begin
-			tier1 := 0;
-			tier2 := 7;
-			tier3 := 9;
-			tier4 := 11;
-			tier5 := 0;
-			tier6 := 0;
-			charge1 := 0;
-			charge2 := 1000;
-			charge3 := 1500;
-			charge4 := 2000;
-			charge5 := 0;
-			charge6 := 0;
-		end
-		else if (material = 'Orcish') then
-		begin
-			tier1 := 0;
-			tier2 := 0;
-			tier3 := 20;
-			tier4 := 22;
-			tier5 := 25;
-			tier6 := 0;
-			charge1 := 0;
-			charge2 := 0;
-			charge3 := 1500;
-			charge4 := 2000;
-			charge5 := 2500;
-			charge6 := 0;
-		end
-	end;
-	
-	enchType := 'AbsorbH';
-	if (tier1 > 0) OR (tier2 > 0) OR (tier3 > 0) OR (tier4 > 0) OR (tier5 > 0) OR (tier6 > 0) then
-	begin
-		sublist := createList('SublistEnch' + material + weaponType + enchType);
-		processSublist(sublist, enchType, material, weaponType);
-	end;
-	
-	if tier2 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '000AA145', 'Absorption', charge2), tier2);
-	if tier3 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '000AA15A', 'Consuming', charge3), tier3);
-	if tier4 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '000AA15B', 'Devouring', charge4), tier4);
-	if tier5 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '000AA15C', 'Leeching', charge5), tier5);
-	if tier6 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '000AA15D', 'the Vampire', charge6), tier6);
-	
-	
-	// Absorb Magica
-	enchType := 'AbsorbM';
-	if (tier1 > 0) OR (tier2 > 0) OR (tier3 > 0) OR (tier4 > 0) OR (tier5 > 0) OR (tier6 > 0) then
-	begin
-		sublist := createList('SublistEnch' + material + weaponType + enchType);
-		processSublist(sublist, enchType, material, weaponType);
-	end;
-	
-	if tier2 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '000AA158', 'Siphoning', charge2), tier2);
-	if tier3 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '000AA15E', 'Harrowing', charge3), tier3);
-	if tier4 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '000AA15F', 'Winnowing', charge4), tier4);
-	if tier5 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '000AA160', 'Evoking', charge5), tier5);
-	if tier6 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '000AA161', 'the Sorcerer', charge6), tier6);
-	
-	// Absorb Stamina
-	enchType := 'AbsorbS';
-	if (tier1 > 0) OR (tier2 > 0) OR (tier3 > 0) OR (tier4 > 0) OR (tier5 > 0) OR (tier6 > 0) then
-	begin
-		sublist := createList('SublistEnch' + material + weaponType + enchType);
-		processSublist(sublist, enchType, material, weaponType);
-	end;
-	
-	if tier2 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '000AA159', 'Gleaning', charge2), tier2);
-	if tier3 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '000AA162', 'Reaping', charge3), tier3);
-	if tier4 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '000AA163', 'Harvesting', charge4), tier4);
-	if tier5 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '000AA164', 'Garnering', charge5), tier5);
-	if tier6 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '000AA165', 'Subsuming', charge6), tier6);
-	
-	// Banish
-	if material = 'Iron' then
-	begin
-		tier1 := 0;
-		tier2 := 0;
-		tier3 := 0;
-		tier4 := 0;
-		tier5 := 0;
-		tier6 := 0;
-		charge1 := 0;
-		charge2 := 0;
-		charge3 := 0;
-		charge4 := 0;
-		charge5 := 0;
-		charge6 := 0;
-	end
-	else if material = 'Imperial' then
-	begin
-		tier1 := 0;
-		tier2 := 0;
-		tier3 := 0;
-		tier4 := 0;
-		tier5 := 0;
-		tier6 := 0;
-		charge1 := 0;
-		charge2 := 0;
-		charge3 := 0;
-		charge4 := 0;
-		charge5 := 0;
-		charge6 := 0;
-	end
-	else if material = 'Steel' then
-	begin
-		tier1 := 0;
-		tier2 := 0;
-		tier3 := 0;
-		tier4 := 0;
-		tier5 := 0;
-		tier6 := 0;
-		charge1 := 0;
-		charge2 := 0;
-		charge3 := 0;
-		charge4 := 0;
-		charge5 := 0;
-		charge6 := 0;
-	end
-	else if material = 'Dwarven' then
-	begin
-		tier1 := 0;
-		tier2 := 0;
-		tier3 := 0;
-		tier4 := 0;
-		tier5 := 0;
-		tier6 := 0;
-		charge1 := 0;
-		charge2 := 0;
-		charge3 := 0;
-		charge4 := 0;
-		charge5 := 0;
-		charge6 := 0;
-	end
-	else if material = 'Orcish' then
-	begin
-		tier1 := 0;
-		tier2 := 0;
-		tier3 := 0;
-		tier4 := 0;
-		tier5 := 0;
-		tier6 := 0;
-		charge1 := 0;
-		charge2 := 0;
-		charge3 := 0;
-		charge4 := 0;
-		charge5 := 0;
-		charge6 := 0;
-	end
-	else if (material = 'Elven') OR (material='Nordic') then
-	begin
-		tier1 := 0;
-		tier2 := 0;
-		tier3 := 0;
-		tier4 := 22;
-		tier5 := 25;
-		tier6 := 0;
-		charge1 := 0;
-		charge2 := 0;
-		charge3 := 0;
-		charge4 := 2000;
-		charge5 := 2500;
-		charge6 := 0;
-	end
-	else if material = 'Glass' then
-	begin
-		tier1 := 0;
-		tier2 := 0;
-		tier3 := 0;
-		tier4 := 31;
-		tier5 := 34;
-		tier6 := 0;
-		charge1 := 0;
-		charge2 := 0;
-		charge3 := 0;
-		charge4 := 2000;
-		charge5 := 2500;
-		charge6 := 0;
-	end
-	else if (material = 'Stalhrim') then
-	begin
-		tier1 := 0;
-		tier2 := 0;
-		tier3 := 0;
-		tier4 := 36;
-		tier5 := 40;
-		tier6 := 43;
-		charge1 := 0;
-		charge2 := 0;
-		charge3 := 0;
-		charge4 := 2000;
-		charge5 := 2500;
-		charge6 := 3000;
-	end
-	else if (material = 'Ebony') then
-	begin
-		tier1 := 0;
-		tier2 := 0;
-		tier3 := 0;
-		tier4 := 37;
-		tier5 := 40;
-		tier6 := 43;
-		charge1 := 0;
-		charge2 := 0;
-		charge3 := 0;
-		charge4 := 2000;
-		charge5 := 2500;
-		charge6 := 3000;
-	end
-	else if material = 'Daedric' then
-	begin
-		tier1 := 0;
-		tier2 := 0;
-		tier3 := 0;
-		tier4 := 47;
-		tier5 := 50;
-		tier6 := 53;
-		charge1 := 0;
-		charge2 := 0;
-		charge3 := 0;
-		charge4 := 2000;
-		charge5 := 2500;
-		charge6 := 3000;
-	end;
+		allWeaponTypes.Add(weaponType);
 
-	if (waccf = true) then
-	begin
-		if material = 'Elven' then
-		begin
-			tier1 := 0;
-			tier2 := 0;
-			tier3 := 0;
-			tier4 := 0;
-			tier5 := 0;
-			tier6 := 0;
-			charge1 := 0;
-			charge2 := 0;
-			charge3 := 0;
-			charge4 := 0;
-			charge5 := 0;
-			charge6 := 0;
-		end
-		else if material = 'Dwarven' then
-		begin
-			tier1 := 0;
-			tier2 := 0;
-			tier3 := 0;
-			tier4 := 0;
-			tier5 := 0;
-			tier6 := 0;
-			charge1 := 0;
-			charge2 := 0;
-			charge3 := 0;
-			charge4 := 0;
-			charge5 := 0;
-			charge6 := 0;
-		end
-		else if (material = 'Orcish') then
-		begin
-			tier1 := 0;
-			tier2 := 0;
-			tier3 := 0;
-			tier4 := 22;
-			tier5 := 25;
-			tier6 := 0;
-			charge1 := 0;
-			charge2 := 0;
-			charge3 := 0;
-			charge4 := 2000;
-			charge5 := 2500;
-			charge6 := 0;
-		end
-	end;
-	
-	// Banish
-	enchType := 'Banish';
-	if (tier1 > 0) OR (tier2 > 0) OR (tier3 > 0) OR (tier4 > 0) OR (tier5 > 0) OR (tier6 > 0) then
-	begin
-		sublist := createList('SublistEnch' + material + weaponType + enchType);
-		processSublist(sublist, enchType, material, weaponType);
-	end;
-	
-	if tier4 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '000ACBB7', 'Banishing', charge4), tier4);
-	if tier5 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '000ACBB8', 'Expelling', charge5), tier5);
-	if tier6 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '000ACBB9', 'Annihilating', charge6), tier6);
-	
-	// Paralyze
-	enchType := 'Paralyze';
-	if (tier1 > 0) OR (tier2 > 0) OR (tier3 > 0) OR (tier4 > 0) OR (tier5 > 0) OR (tier6 > 0) then
-	begin
-		sublist := createList('SublistEnch' + material + weaponType + enchType);
-		processSublist(sublist, enchType, material, weaponType);
-	end;
-	
-	if tier4 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '000ACBBA', 'Stunning', charge4), tier4);
-	if tier5 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '000ACBBB', 'Immobilizing', charge5), tier5);
-	if tier6 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '000ACBBC', 'Petrifying', charge6), tier6);	
-	
-	// Chaos
-	if material = 'Iron' then
-	begin
-		tier1 := 0;
-		tier2 := 0;
-		tier3 := 0;
-		tier4 := 0;
-		tier5 := 0;
-		tier6 := 0;
-		charge1 := 0;
-		charge2 := 0;
-		charge3 := 0;
-		charge4 := 0;
-		charge5 := 0;
-		charge6 := 0;
-	end
-	else if material = 'Imperial' then
-	begin
-		tier1 := 0;
-		tier2 := 0;
-		tier3 := 0;
-		tier4 := 0;
-		tier5 := 0;
-		tier6 := 0;
-		charge1 := 0;
-		charge2 := 0;
-		charge3 := 0;
-		charge4 := 0;
-		charge5 := 0;
-		charge6 := 0;
-	end
-	else if material = 'Steel' then
-	begin
-		tier1 := 0;
-		tier2 := 0;
-		tier3 := 0;
-		tier4 := 0;
-		tier5 := 0;
-		tier6 := 0;
-		charge1 := 0;
-		charge2 := 0;
-		charge3 := 0;
-		charge4 := 0;
-		charge5 := 0;
-		charge6 := 0;
-	end
-	else if material = 'Dwarven' then
-	begin
-		tier1 := 0;
-		tier2 := 0;
-		tier3 := 0;
-		tier4 := 0;
-		tier5 := 0;
-		tier6 := 0;
-		charge1 := 0;
-		charge2 := 0;
-		charge3 := 0;
-		charge4 := 0;
-		charge5 := 0;
-		charge6 := 0;
-	end
-	else if material = 'Orcish' then
-	begin
-		tier1 := 0;
-		tier2 := 0;
-		tier3 := 0;
-		tier4 := 0;
-		tier5 := 0;
-		tier6 := 0;
-		charge1 := 0;
-		charge2 := 0;
-		charge3 := 0;
-		charge4 := 0;
-		charge5 := 0;
-		charge6 := 0;
-	end
-	else if material = 'Elven' then
-	begin
-		tier1 := 0;
-		tier2 := 0;
-		tier3 := 0;
-		tier4 := 0;
-		tier5 := 0;
-		tier6 := 0;
-		charge1 := 0;
-		charge2 := 0;
-		charge3 := 0;
-		charge4 := 0;
-		charge5 := 0;
-		charge6 := 0;
-	end
-	else if material='Nordic' then
-	begin
-		tier1 := 0;
-		tier2 := 0;
-		tier3 := 20;
-		tier4 := 22;
-		tier5 := 25;
-		tier6 := 0;
-		charge1 := 0;
-		charge2 := 0;
-		charge3 := 1500;
-		charge4 := 2000;
-		charge5 := 2500;
-		charge6 := 0;
-	end
-	else if material = 'Glass' then
-	begin
-		tier1 := 0;
-		tier2 := 0;
-		tier3 := 0;
-		tier4 := 0;
-		tier5 := 0;
-		tier6 := 0;
-		charge1 := 0;
-		charge2 := 0;
-		charge3 := 0;
-		charge4 := 0;
-		charge5 := 0;
-		charge6 := 0;
-	end
-	else if material = 'Ebony' then
-	begin
-		tier1 := 0;
-		tier2 := 0;
-		tier3 := 0;
-		tier4 := 0;
-		tier5 := 0;
-		tier6 := 0;
-		charge1 := 0;
-		charge2 := 0;
-		charge3 := 0;
-		charge4 := 0;
-		charge5 := 0;
-		charge6 := 0;
-	end
-	else if material = 'Stalhrim' then
-	begin
-		tier1 := 0;
-		tier2 := 0;
-		tier3 := 0;
-		tier4 := 36;
-		tier5 := 40;
-		tier6 := 43;
-		charge1 := 0;
-		charge2 := 0;
-		charge3 := 0;
-		charge4 := 2000;
-		charge5 := 2500;
-		charge6 := 3000;
-	end
-	else if material = 'Daedric' then
-	begin
-		tier1 := 0;
-		tier2 := 0;
-		tier3 := 0;
-		tier4 := 0;
-		tier5 := 0;
-		tier6 := 0;
-		charge1 := 0;
-		charge2 := 0;
-		charge3 := 0;
-		charge4 := 0;
-		charge5 := 0;
-		charge6 := 0;
-	end;	
-	
-	enchType := 'Chaos';
-	if (tier1 > 0) OR (tier2 > 0) OR (tier3 > 0) OR (tier4 > 0) OR (tier5 > 0) OR (tier6 > 0) then
-	begin
-		sublist := createList('SublistEnch' + material + weaponType + enchType);
-		processSublist(sublist, enchType, material, weaponType);
-	end;
-	
-	if tier3 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0402C46F', 'Chaos', charge3), tier3);
-	if tier4 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0402C470', 'High Chaos', charge4), tier4);
-	if tier5 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0402C471', 'Extreme Chaos', charge5), tier5);
-	if tier6 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0402C472', 'Ultimate Chaos', charge6), tier6);
-	
-	if material = 'Iron' then
-	begin
-		tier1 := 1;
-		tier2 := 4;
-		tier3 := 6;
-		tier4 := 0;
-		tier5 := 0;
-		tier6 := 0;
-		charge1 := 500;
-		charge2 := 1000;
-		charge3 := 1500;
-		charge4 := 0;
-		charge5 := 0;
-		charge6 := 0;
-	end
-	else if material = 'Imperial' then
-	begin
-		tier1 := 4;
-		tier2 := 6;
-		tier3 := 8;
-		tier4 := 0;
-		tier5 := 0;
-		tier6 := 0;
-		charge1 := 200;
-		charge2 := 300;
-		charge3 := 400;
-		charge4 := 0;
-		charge5 := 0;
-		charge6 := 0;
-	end
-	else if material = 'Steel' then
-	begin
-		tier1 := 4;
-		tier2 := 6;
-		tier3 := 8;
-		tier4 := 0;
-		tier5 := 0;
-		tier6 := 0;
-		charge1 := 500;
-		charge2 := 1000;
-		charge3 := 15000;
-		charge4 := 0;
-		charge5 := 0;
-		charge6 := 0;
-	end
-	else if material = 'Dwarven' then
-	begin
-		tier1 := 0;
-		tier2 := 13;
-		tier3 := 15;
-		tier4 := 17;
-		tier5 := 0;
-		tier6 := 0;
-		charge1 := 0;
-		charge2 := 1000;
-		charge3 := 1500;
-		charge4 := 2000;
-		charge5 := 0;
-		charge6 := 0;
-	end
-	else if material = 'Orcish' then
-	begin
-		tier1 := 0;
-		tier2 := 7;
-		tier3 := 9;
-		tier4 := 11;
-		tier5 := 0;
-		tier6 := 0;
-		charge1 := 0;
-		charge2 := 1000;
-		charge3 := 1500;
-		charge4 := 2000;
-		charge5 := 0;
-		charge6 := 0;
-	end
-	else if (material = 'Elven') OR (material='Nordic') then
-	begin
-		tier1 := 0;
-		tier2 := 0;
-		tier3 := 20;
-		tier4 := 22;
-		tier5 := 25;
-		tier6 := 0;
-		charge1 := 0;
-		charge2 := 0;
-		charge3 := 1500;
-		charge4 := 2000;
-		charge5 := 2500;
-		charge6 := 0;
-	end
-	else if material = 'Glass' then
-	begin
-		tier1 := 0;
-		tier2 := 0;
-		tier3 := 28;
-		tier4 := 31;
-		tier5 := 34;
-		tier6 := 0;
-		charge1 := 0;
-		charge2 := 0;
-		charge3 := 1500;
-		charge4 := 2000;
-		charge5 := 2500;
-		charge6 := 0;
-	end
-	else if (material = 'Stalhrim') then
-	begin
-		tier1 := 0;
-		tier2 := 0;
-		tier3 := 0;
-		tier4 := 36;
-		tier5 := 40;
-		tier6 := 43;
-		charge1 := 0;
-		charge2 := 0;
-		charge3 := 0;
-		charge4 := 2000;
-		charge5 := 2500;
-		charge6 := 3000;
-	end
-	else if (material = 'Ebony') then
-	begin
-		tier1 := 0;
-		tier2 := 0;
-		tier3 := 0;
-		tier4 := 37;
-		tier5 := 40;
-		tier6 := 43;
-		charge1 := 0;
-		charge2 := 0;
-		charge3 := 0;
-		charge4 := 2000;
-		charge5 := 2500;
-		charge6 := 3000;
-	end
-	else if material = 'Daedric' then
-	begin
-		tier1 := 0;
-		tier2 := 0;
-		tier3 := 0;
-		tier4 := 47;
-		tier5 := 50;
-		tier6 := 53;
-		charge1 := 0;
-		charge2 := 0;
-		charge3 := 0;
-		charge4 := 2000;
-		charge5 := 2500;
-		charge6 := 3000;
-	end;
-
-	if (waccf = true) then
-	begin
-		if material = 'Elven' then
-		begin
-			tier1 := 0;
-			tier2 := 13;
-			tier3 := 15;
-			tier4 := 17;
-			tier5 := 0;
-			tier6 := 0;
-			charge1 := 0;
-			charge2 := 1000;
-			charge3 := 1500;
-			charge4 := 2000;
-			charge5 := 0;
-			charge6 := 0;
-		end
-		else if material = 'Dwarven' then
-		begin
-			tier1 := 0;
-			tier2 := 7;
-			tier3 := 9;
-			tier4 := 11;
-			tier5 := 0;
-			tier6 := 0;
-			charge1 := 0;
-			charge2 := 1000;
-			charge3 := 1500;
-			charge4 := 2000;
-			charge5 := 0;
-			charge6 := 0;
-		end
-		else if (material = 'Orcish') then
-		begin
-			tier1 := 0;
-			tier2 := 0;
-			tier3 := 20;
-			tier4 := 22;
-			tier5 := 25;
-			tier6 := 0;
-			charge1 := 0;
-			charge2 := 0;
-			charge3 := 1500;
-			charge4 := 2000;
-			charge5 := 2500;
-			charge6 := 0;
-		end
-	end;
-	
-	// Fear
-	enchType := 'Fear';
-	if (tier1 > 0) OR (tier2 > 0) OR (tier3 > 0) OR (tier4 > 0) OR (tier5 > 0) OR (tier6 > 0) then
-	begin
-		sublist := createList('SublistEnch' + material + weaponType + enchType);
-		processSublist(sublist, enchType, material, weaponType);
-	end;
-	
-	if tier1 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '000FBFF7', 'Dismay', charge1), tier1);
-	if tier2 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0005B466', 'Cowardice', charge2), tier2);
-	if tier3 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0005B467', 'Fear', charge3), tier3);
-	if tier4 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0005B468', 'Despair', charge4), tier4);
-	if tier5 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0005B469', 'Dread', charge5), tier5);
-	if tier6 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0005B46A', 'Terror', charge6), tier6);
-	
-	// Fire
-	enchType := 'Fire';
-	if (tier1 > 0) OR (tier2 > 0) OR (tier3 > 0) OR (tier4 > 0) OR (tier5 > 0) OR (tier6 > 0) then
-	begin
-		sublist := createList('SublistEnch' + material + weaponType + enchType);
-		processSublist(sublist, enchType, material, weaponType);
-	end;
-	
-	if tier1 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '00049BB7', 'Embers', charge1), tier1);
-	if tier2 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '00045C2A', 'Burning', charge2), tier2);
-	if tier3 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '00045C2C', 'Scorching', charge3), tier3);
-	if tier4 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '00045C2D', 'Flames', charge4), tier4);
-	if tier5 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '00045C30', 'the Blaze', charge5), tier5);
-	if tier6 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '00045C35', 'the Inferno', charge6), tier6);
-	
-	// Frost
-	enchType := 'Frost';
-	if (tier1 > 0) OR (tier2 > 0) OR (tier3 > 0) OR (tier4 > 0) OR (tier5 > 0) OR (tier6 > 0) then
-	begin
-		sublist := createList('SublistEnch' + material + weaponType + enchType);
-		processSublist(sublist, enchType, material, weaponType);
-	end;
-	
-	if tier1 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '00045C36', 'Chills', charge1), tier1);
-	if tier2 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '00045C37', 'Frost', charge2), tier2);
-	if tier3 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '00045C39', 'Ice', charge3), tier3);
-	if tier4 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '00045D4B', 'Freezing', charge4), tier4);
-	if tier5 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '00045D56', 'Blizzards', charge5), tier5);
-	if tier6 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '00045D58', 'Winter', charge6), tier6);
-	
-	// Magicka Damage
-	enchType := 'Magica';
-	if (tier1 > 0) OR (tier2 > 0) OR (tier3 > 0) OR (tier4 > 0) OR (tier5 > 0) OR (tier6 > 0) then
-	begin
-		sublist := createList('SublistEnch' + material + weaponType + enchType);
-		processSublist(sublist, enchType, material, weaponType);
-	end;
-	
-	if tier1 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0005B453', 'Sapping', charge1), tier1);
-	if tier2 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0005B454', 'Draining', charge2), tier2);
-	if tier3 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0005B455', 'Diminishing', charge3), tier3);
-	if tier4 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0005B456', 'Depleting', charge4), tier4);
-	if tier5 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0005B457', 'Enervating', charge5), tier5);
-	if tier6 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0005B458', 'Nullifying', charge6), tier6);	
-	
-	// Shock		
-	enchType := 'Shock';
-	if (tier1 > 0) OR (tier2 > 0) OR (tier3 > 0) OR (tier4 > 0) OR (tier5 > 0) OR (tier6 > 0) then
-	begin
-		sublist := createList('SublistEnch' + material + weaponType + enchType);
-		processSublist(sublist, enchType, material, weaponType);
-	end;
-	
-	
-	if tier1 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '00045D59', 'Sparks', charge1), tier1); 
-	if tier2 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '00045D97', 'Arcing', charge2), tier2); 
-	if tier3 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '00045F6F', 'Shocks', charge3), tier3); 
-	if tier4 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '00045F89', 'Thunderbolts', charge4), tier4); 
-	if tier5 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '00045F8D', 'Lightning', charge5), tier5); 
-	if tier6 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '00045F9E', 'Storms', charge6), tier6);
-	
-	// Soul Trap
-	enchType := 'SoulTrap';
-	if (tier1 > 0) OR (tier2 > 0) OR (tier3 > 0) OR (tier4 > 0) OR (tier5 > 0) OR (tier6 > 0) then
-	begin
-		sublist := createList('SublistEnch' + material + weaponType + enchType);
-		processSublist(sublist, enchType, material, weaponType);
-	end;
-	
-	if tier1 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0005B45F', 'Souls', charge1), tier1);
-	if tier2 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0005B460', 'Soul Snares', charge2), tier2); 
-	if tier3 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0005B461', 'Binding', charge3), tier3);
-	if tier4 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0005B462', 'Animus', charge4), tier4);
-	if tier5 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0005B463', 'Malediction', charge5), tier5);
-	if tier6 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0005B464', 'Damnation', charge6), tier6);
-	
-	// Stamina Damage
-	enchType := 'Stamina';
-	if (tier1 > 0) OR (tier2 > 0) OR (tier3 > 0) OR (tier4 > 0) OR (tier5 > 0) OR (tier6 > 0) then
-	begin
-		sublist := createList('SublistEnch' + material + weaponType + enchType);
-		processSublist(sublist, enchType, material, weaponType);
-	end;
-	
-	if tier1 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0005B459', 'Fatigue', charge1), tier1);
-	if tier2 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0005B45A', 'Weariness', charge2), tier2);
-	if tier3 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0005B45B', 'Torpor', charge3), tier3);
-	if tier4 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0005B45C', 'Debilitation', charge4), tier4);
-	if tier5 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0005B45D', 'Lethargy', charge5), tier5);
-	if tier6 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0005B45E', 'Exhaustion', charge6), tier6);
-	
-	// Turn Undead
-	enchType := 'Turn';
-	if (tier1 > 0) OR (tier2 > 0) OR (tier3 > 0) OR (tier4 > 0) OR (tier5 > 0) OR (tier6 > 0) then
-	begin
-		sublist := createList('SublistEnch' + material + weaponType + enchType);
-		processSublist(sublist, enchType, material, weaponType);
-	end;
-	
-	if tier1 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0005B46C', 'Blessed', charge1), tier1);
-	if tier2 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0005B46D', 'Sanctified', charge2), tier2); 
-	if tier3 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0005B46E', 'Reverent', charge3), tier3);
-	if tier4 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0005B46F', 'Hallowed', charge4), tier4);
-	if tier5 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0005B470', 'Virtuous', charge5), tier5);
-	if tier6 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '000BF3F5', 'Holy', charge6), tier6);
-	
-	// Create LItem list structure and add to vanilla lists
-	createLItemLists(material, weaponType);
-	
-	{
+		// Absorb Armor		
 		if material = 'Iron' then
 		begin
-		tier1 := ;
-		tier2 := ;
-		tier3 := ;
-		tier4 =;
-		tier5 := ;
-		tier6 := ;
-		charge1 := ;
-		charge2 := ;
-		charge3 := ;
-		charge4 := ;
-		charge5 := ;
-		charge6 := ;
+			tier1 := 0;
+			tier2 := 0;
+			tier3 := 0;
+			tier4 := 0;
+			tier5 := 0;
+			tier6 := 0;
+			charge1 := 0;
+			charge2 := 0;
+			charge3 := 0;
+			charge4 := 0;
+			charge5 := 0;
+			charge6 := 0;
 		end
 		else if material = 'Imperial' then
 		begin
-		tier1 := ;
-		tier2 := ;
-		tier3 := ;
-		tier4 =;
-		tier5 := ;
-		tier6 := ;
-		charge1 := ;
-		charge2 := ;
-		charge3 := ;
-		charge4 := ;
-		charge5 := ;
-		charge6 := ;
+			tier1 := 0;
+			tier2 := 0;
+			tier3 := 0;
+			tier4 := 0;
+			tier5 := 0;
+			tier6 := 0;
+			charge1 := 0;
+			charge2 := 0;
+			charge3 := 0;
+			charge4 := 0;
+			charge5 := 0;
+			charge6 := 0;
 		end
 		else if material = 'Steel' then
 		begin
-		tier1 := ;
-		tier2 := ;
-		tier3 := ;
-		tier4 =;
-		tier5 := ;
-		tier6 := ;
-		charge1 := ;
-		charge2 := ;
-		charge3 := ;
-		charge4 := ;
-		charge5 := ;
-		charge6 := ;
+			tier1 := 0;
+			tier2 := 0;
+			tier3 := 0;
+			tier4 := 0;
+			tier5 := 0;
+			tier6 := 0;
+			charge1 := 0;
+			charge2 := 0;
+			charge3 := 0;
+			charge4 := 0;
+			charge5 := 0;
+			charge6 := 0;
 		end
 		else if material = 'Dwarven' then
 		begin
-		tier1 := ;
-		tier2 := ;
-		tier3 := ;
-		tier4 =;
-		tier5 := ;
-		tier6 := ;
-		charge1 := ;
-		charge2 := ;
-		charge3 := ;
-		charge4 := ;
-		charge5 := ;
-		charge6 := ;
+			tier1 := 0;
+			tier2 := 13;
+			tier3 := 15;
+			tier4 := 17;
+			tier5 := 0;
+			tier6 := 0;
+			charge1 := 0;
+			charge2 := 1000;
+			charge3 := 1500;
+			charge4 := 2000;
+			charge5 := 0;
+			charge6 := 0;
 		end
 		else if material = 'Orcish' then
 		begin
-		tier1 := ;
-		tier2 := ;
-		tier3 := ;
-		tier4 =;
-		tier5 := ;
-		tier6 := ;
-		charge1 := ;
-		charge2 := ;
-		charge3 := ;
-		charge4 := ;
-		charge5 := ;
-		charge6 := ;
+			tier1 := 0;
+			tier2 := 7;
+			tier3 := 9;
+			tier4 := 11;
+			tier5 := 0;
+			tier6 := 0;
+			charge1 := 0;
+			charge2 := 1000;
+			charge3 := 1500;
+			charge4 := 2000;
+			charge5 := 0;
+			charge6 := 0;
 		end
 		else if (material = 'Elven') OR (material='Nordic') then
 		begin
-		tier1 := ;
-		tier2 := ;
-		tier3 := ;
-		tier4 =;
-		tier5 := ;
-		tier6 := ;
-		charge1 := ;
-		charge2 := ;
-		charge3 := ;
-		charge4 := ;
-		charge5 := ;
-		charge6 := ;
-		end
+			tier1 := 0;
+			tier2 := 0;
+			tier3 := 20;
+			tier4 := 22;
+			tier5 := 25;
+			tier6 := 0;
+			charge1 := 0;
+			charge2 := 0;
+			charge3 := 1500;
+			charge4 := 2000;
+			charge5 := 2500;
+			charge6 := 0;
+		end	
 		else if material = 'Glass' then
 		begin
-		tier1 := ;
-		tier2 := ;
-		tier3 := ;
-		tier4 =;
-		tier5 := ;
-		tier6 := ;
-		charge1 := ;
-		charge2 := ;
-		charge3 := ;
-		charge4 := ;
-		charge5 := ;
-		charge6 := ;
+			tier1 := 0;
+			tier2 := 0;
+			tier3 := 28;
+			tier4 := 31;
+			tier5 := 34;
+			tier6 := 0;
+			charge1 := 0;
+			charge2 := 0;
+			charge3 := 1500;
+			charge4 := 2000;
+			charge5 := 2500;
+			charge6 := 0;
 		end
-		else if (material = 'Ebony') OR (material = 'Stalhrim') then
+		else if (material = 'Stalhrim') then
 		begin
-		tier1 := ;
-		tier2 := ;
-		tier3 := ;
-		tier4 =;
-		tier5 := ;
-		tier6 := ;
-		charge1 := ;
-		charge2 := ;
-		charge3 := ;
-		charge4 := ;
-		charge5 := ;
-		charge6 := ;
+			tier1 := 0;
+			tier2 := 0;
+			tier3 := 0;
+			tier4 := 36;
+			tier5 := 40;
+			tier6 := 43;
+			charge1 := 0;
+			charge2 := 0;
+			charge3 := 0;
+			charge4 := 2000;
+			charge5 := 2500;
+			charge6 := 3000;
+		end
+		else if (material = 'Ebony') then
+		begin
+			tier1 := 0;
+			tier2 := 0;
+			tier3 := 0;
+			tier4 := 37;
+			tier5 := 40;
+			tier6 := 43;
+			charge1 := 0;
+			charge2 := 0;
+			charge3 := 0;
+			charge4 := 2000;
+			charge5 := 2500;
+			charge6 := 3000;
 		end
 		else if material = 'Daedric' then
 		begin
-		tier1 := ;
-		tier2 := ;
-		tier3 := ;
-		tier4 =;
-		tier5 := ;
-		tier6 := ;
-		charge1 := ;
-		charge2 := ;
-		charge3 := ;
-		charge4 := ;
-		charge5 := ;
-		charge6 := ;
-		end
-		else if (material = 'Draugr') OR (material = 'DraugrHoned')then
+			tier1 := 0;
+			tier2 := 0;
+			tier3 := 0;
+			tier4 := 47;
+			tier5 := 50;
+			tier6 := 53;
+			charge1 := 0;
+			charge2 := 0;
+			charge3 := 0;
+			charge4 := 2000;
+			charge5 := 2500;
+			charge6 := 3000;
+		end;
+
+		enchType := 'AbsorbArmor';
+		if (tier1 > 0) OR (tier2 > 0) OR (tier3 > 0) OR (tier4 > 0) OR (tier5 > 0) OR (tier6 > 0) then
 		begin
-		tier1 := 0;
-		tier2 := 0;
-		tier3 := 0;
-		tier4 := 0;
-		tier5 := 0;
-		tier6 := 0;
-		charge1 := 0;
-		charge2 := 0;
-		charge3 := 0;
-		charge4 := 0;
-		charge5 := 0;
-		charge6 := 0;
-		end
-		else if (material = 'Falmer') OR (material = 'FalmerHoned') then
-		begin
-		tier1 := ;
-		tier2 := ;
-		tier3 := ;
-		tier4 =;
-		tier5 := ;
-		tier6 := ;
-		charge1 := ;
-		charge2 := ;
-		charge3 := ;
-		charge4 := ;
-		charge5 := ;
-		charge6 := ;
-		end
-		else if material = 'Dragonbone' then
-		begin
-		tier1 := ;
-		tier2 := ;
-		tier3 := ;
-		tier4 =;
-		tier5 := ;
-		tier6 := ;
-		charge1 := ;
-		charge2 := ;
-		charge3 := ;
-		charge4 := ;
-		charge5 := ;
-		charge6 := ;
-		end
-	}
+			sublist := createList('SublistEnch' + material + weaponType + enchType);
+			processSublist(sublist, enchType, material, weaponType);
+		end;
+		
+		if tier2 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '0510DD', 'Electrolysis', charge2), tier2);
+		if tier3 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '0510DD', 'Chrome', charge3), tier3);
+		if tier4 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '05111F', 'Anodization', charge4), tier4);
+		if tier5 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '051120', 'Electroplating', charge5), tier5);
+		if tier6 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '051121', 'Galvanization', charge6), tier6);
+
+	end;
+
+	if (vanilla = true) then
+	begin
 	
+		allWeaponTypes.Add(weaponType);
+		
+		// Absorb Health		
+		if material = 'Iron' then
+		begin
+			tier1 := 0;
+			tier2 := 0;
+			tier3 := 0;
+			tier4 := 0;
+			tier5 := 0;
+			tier6 := 0;
+			charge1 := 0;
+			charge2 := 0;
+			charge3 := 0;
+			charge4 := 0;
+			charge5 := 0;
+			charge6 := 0;
+		end
+		else if material = 'Imperial' then
+		begin
+			tier1 := 0;
+			tier2 := 0;
+			tier3 := 0;
+			tier4 := 0;
+			tier5 := 0;
+			tier6 := 0;
+			charge1 := 0;
+			charge2 := 0;
+			charge3 := 0;
+			charge4 := 0;
+			charge5 := 0;
+			charge6 := 0;
+		end
+		else if material = 'Steel' then
+		begin
+			tier1 := 0;
+			tier2 := 0;
+			tier3 := 0;
+			tier4 := 0;
+			tier5 := 0;
+			tier6 := 0;
+			charge1 := 0;
+			charge2 := 0;
+			charge3 := 0;
+			charge4 := 0;
+			charge5 := 0;
+			charge6 := 0;
+		end
+		else if material = 'Dwarven' then
+		begin
+			tier1 := 0;
+			tier2 := 13;
+			tier3 := 15;
+			tier4 := 17;
+			tier5 := 0;
+			tier6 := 0;
+			charge1 := 0;
+			charge2 := 1000;
+			charge3 := 1500;
+			charge4 := 2000;
+			charge5 := 0;
+			charge6 := 0;
+		end
+		else if material = 'Orcish' then
+		begin
+			tier1 := 0;
+			tier2 := 7;
+			tier3 := 9;
+			tier4 := 11;
+			tier5 := 0;
+			tier6 := 0;
+			charge1 := 0;
+			charge2 := 1000;
+			charge3 := 1500;
+			charge4 := 2000;
+			charge5 := 0;
+			charge6 := 0;
+		end
+		else if (material = 'Elven') OR (material='Nordic') then
+		begin
+			tier1 := 0;
+			tier2 := 0;
+			tier3 := 20;
+			tier4 := 22;
+			tier5 := 25;
+			tier6 := 0;
+			charge1 := 0;
+			charge2 := 0;
+			charge3 := 1500;
+			charge4 := 2000;
+			charge5 := 2500;
+			charge6 := 0;
+		end	
+		else if material = 'Glass' then
+		begin
+			tier1 := 0;
+			tier2 := 0;
+			tier3 := 28;
+			tier4 := 31;
+			tier5 := 34;
+			tier6 := 0;
+			charge1 := 0;
+			charge2 := 0;
+			charge3 := 1500;
+			charge4 := 2000;
+			charge5 := 2500;
+			charge6 := 0;
+		end
+		else if (material = 'Stalhrim') then
+		begin
+			tier1 := 0;
+			tier2 := 0;
+			tier3 := 0;
+			tier4 := 36;
+			tier5 := 40;
+			tier6 := 43;
+			charge1 := 0;
+			charge2 := 0;
+			charge3 := 0;
+			charge4 := 2000;
+			charge5 := 2500;
+			charge6 := 3000;
+		end
+		else if (material = 'Ebony') then
+		begin
+			tier1 := 0;
+			tier2 := 0;
+			tier3 := 0;
+			tier4 := 37;
+			tier5 := 40;
+			tier6 := 43;
+			charge1 := 0;
+			charge2 := 0;
+			charge3 := 0;
+			charge4 := 2000;
+			charge5 := 2500;
+			charge6 := 3000;
+		end
+		else if material = 'Daedric' then
+		begin
+			tier1 := 0;
+			tier2 := 0;
+			tier3 := 0;
+			tier4 := 47;
+			tier5 := 50;
+			tier6 := 53;
+			charge1 := 0;
+			charge2 := 0;
+			charge3 := 0;
+			charge4 := 2000;
+			charge5 := 2500;
+			charge6 := 3000;
+		end;
+
+		if (waccf = true) then
+		begin
+			if material = 'Elven' then
+			begin
+				tier1 := 0;
+				tier2 := 13;
+				tier3 := 15;
+				tier4 := 17;
+				tier5 := 0;
+				tier6 := 0;
+				charge1 := 0;
+				charge2 := 1000;
+				charge3 := 1500;
+				charge4 := 2000;
+				charge5 := 0;
+				charge6 := 0;
+			end
+			else if material = 'Dwarven' then
+			begin
+				tier1 := 0;
+				tier2 := 7;
+				tier3 := 9;
+				tier4 := 11;
+				tier5 := 0;
+				tier6 := 0;
+				charge1 := 0;
+				charge2 := 1000;
+				charge3 := 1500;
+				charge4 := 2000;
+				charge5 := 0;
+				charge6 := 0;
+			end
+			else if (material = 'Orcish') then
+			begin
+				tier1 := 0;
+				tier2 := 0;
+				tier3 := 20;
+				tier4 := 22;
+				tier5 := 25;
+				tier6 := 0;
+				charge1 := 0;
+				charge2 := 0;
+				charge3 := 1500;
+				charge4 := 2000;
+				charge5 := 2500;
+				charge6 := 0;
+			end
+		end;
+		
+		enchType := 'AbsorbH';
+		if (tier1 > 0) OR (tier2 > 0) OR (tier3 > 0) OR (tier4 > 0) OR (tier5 > 0) OR (tier6 > 0) then
+		begin
+			sublist := createList('SublistEnch' + material + weaponType + enchType);
+			processSublist(sublist, enchType, material, weaponType);
+		end;
+		
+		if tier2 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '000AA145', 'Absorption', charge2), tier2);
+		if tier3 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '000AA15A', 'Consuming', charge3), tier3);
+		if tier4 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '000AA15B', 'Devouring', charge4), tier4);
+		if tier5 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '000AA15C', 'Leeching', charge5), tier5);
+		if tier6 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '000AA15D', 'the Vampire', charge6), tier6);
+		
+		
+		// Absorb Magica
+		enchType := 'AbsorbM';
+		if (tier1 > 0) OR (tier2 > 0) OR (tier3 > 0) OR (tier4 > 0) OR (tier5 > 0) OR (tier6 > 0) then
+		begin
+			sublist := createList('SublistEnch' + material + weaponType + enchType);
+			processSublist(sublist, enchType, material, weaponType);
+		end;
+		
+		if tier2 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '000AA158', 'Siphoning', charge2), tier2);
+		if tier3 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '000AA15E', 'Harrowing', charge3), tier3);
+		if tier4 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '000AA15F', 'Winnowing', charge4), tier4);
+		if tier5 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '000AA160', 'Evoking', charge5), tier5);
+		if tier6 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '000AA161', 'the Sorcerer', charge6), tier6);
+		
+		// Absorb Stamina
+		enchType := 'AbsorbS';
+		if (tier1 > 0) OR (tier2 > 0) OR (tier3 > 0) OR (tier4 > 0) OR (tier5 > 0) OR (tier6 > 0) then
+		begin
+			sublist := createList('SublistEnch' + material + weaponType + enchType);
+			processSublist(sublist, enchType, material, weaponType);
+		end;
+		
+		if tier2 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '000AA159', 'Gleaning', charge2), tier2);
+		if tier3 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '000AA162', 'Reaping', charge3), tier3);
+		if tier4 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '000AA163', 'Harvesting', charge4), tier4);
+		if tier5 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '000AA164', 'Garnering', charge5), tier5);
+		if tier6 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '000AA165', 'Subsuming', charge6), tier6);
+		
+		// Banish
+		if material = 'Iron' then
+		begin
+			tier1 := 0;
+			tier2 := 0;
+			tier3 := 0;
+			tier4 := 0;
+			tier5 := 0;
+			tier6 := 0;
+			charge1 := 0;
+			charge2 := 0;
+			charge3 := 0;
+			charge4 := 0;
+			charge5 := 0;
+			charge6 := 0;
+		end
+		else if material = 'Imperial' then
+		begin
+			tier1 := 0;
+			tier2 := 0;
+			tier3 := 0;
+			tier4 := 0;
+			tier5 := 0;
+			tier6 := 0;
+			charge1 := 0;
+			charge2 := 0;
+			charge3 := 0;
+			charge4 := 0;
+			charge5 := 0;
+			charge6 := 0;
+		end
+		else if material = 'Steel' then
+		begin
+			tier1 := 0;
+			tier2 := 0;
+			tier3 := 0;
+			tier4 := 0;
+			tier5 := 0;
+			tier6 := 0;
+			charge1 := 0;
+			charge2 := 0;
+			charge3 := 0;
+			charge4 := 0;
+			charge5 := 0;
+			charge6 := 0;
+		end
+		else if material = 'Dwarven' then
+		begin
+			tier1 := 0;
+			tier2 := 0;
+			tier3 := 0;
+			tier4 := 0;
+			tier5 := 0;
+			tier6 := 0;
+			charge1 := 0;
+			charge2 := 0;
+			charge3 := 0;
+			charge4 := 0;
+			charge5 := 0;
+			charge6 := 0;
+		end
+		else if material = 'Orcish' then
+		begin
+			tier1 := 0;
+			tier2 := 0;
+			tier3 := 0;
+			tier4 := 0;
+			tier5 := 0;
+			tier6 := 0;
+			charge1 := 0;
+			charge2 := 0;
+			charge3 := 0;
+			charge4 := 0;
+			charge5 := 0;
+			charge6 := 0;
+		end
+		else if (material = 'Elven') OR (material='Nordic') then
+		begin
+			tier1 := 0;
+			tier2 := 0;
+			tier3 := 0;
+			tier4 := 22;
+			tier5 := 25;
+			tier6 := 0;
+			charge1 := 0;
+			charge2 := 0;
+			charge3 := 0;
+			charge4 := 2000;
+			charge5 := 2500;
+			charge6 := 0;
+		end
+		else if material = 'Glass' then
+		begin
+			tier1 := 0;
+			tier2 := 0;
+			tier3 := 0;
+			tier4 := 31;
+			tier5 := 34;
+			tier6 := 0;
+			charge1 := 0;
+			charge2 := 0;
+			charge3 := 0;
+			charge4 := 2000;
+			charge5 := 2500;
+			charge6 := 0;
+		end
+		else if (material = 'Stalhrim') then
+		begin
+			tier1 := 0;
+			tier2 := 0;
+			tier3 := 0;
+			tier4 := 36;
+			tier5 := 40;
+			tier6 := 43;
+			charge1 := 0;
+			charge2 := 0;
+			charge3 := 0;
+			charge4 := 2000;
+			charge5 := 2500;
+			charge6 := 3000;
+		end
+		else if (material = 'Ebony') then
+		begin
+			tier1 := 0;
+			tier2 := 0;
+			tier3 := 0;
+			tier4 := 37;
+			tier5 := 40;
+			tier6 := 43;
+			charge1 := 0;
+			charge2 := 0;
+			charge3 := 0;
+			charge4 := 2000;
+			charge5 := 2500;
+			charge6 := 3000;
+		end
+		else if material = 'Daedric' then
+		begin
+			tier1 := 0;
+			tier2 := 0;
+			tier3 := 0;
+			tier4 := 47;
+			tier5 := 50;
+			tier6 := 53;
+			charge1 := 0;
+			charge2 := 0;
+			charge3 := 0;
+			charge4 := 2000;
+			charge5 := 2500;
+			charge6 := 3000;
+		end;
+
+		if (waccf = true) then
+		begin
+			if material = 'Elven' then
+			begin
+				tier1 := 0;
+				tier2 := 0;
+				tier3 := 0;
+				tier4 := 0;
+				tier5 := 0;
+				tier6 := 0;
+				charge1 := 0;
+				charge2 := 0;
+				charge3 := 0;
+				charge4 := 0;
+				charge5 := 0;
+				charge6 := 0;
+			end
+			else if material = 'Dwarven' then
+			begin
+				tier1 := 0;
+				tier2 := 0;
+				tier3 := 0;
+				tier4 := 0;
+				tier5 := 0;
+				tier6 := 0;
+				charge1 := 0;
+				charge2 := 0;
+				charge3 := 0;
+				charge4 := 0;
+				charge5 := 0;
+				charge6 := 0;
+			end
+			else if (material = 'Orcish') then
+			begin
+				tier1 := 0;
+				tier2 := 0;
+				tier3 := 0;
+				tier4 := 22;
+				tier5 := 25;
+				tier6 := 0;
+				charge1 := 0;
+				charge2 := 0;
+				charge3 := 0;
+				charge4 := 2000;
+				charge5 := 2500;
+				charge6 := 0;
+			end
+		end;
+		
+		// Banish
+		enchType := 'Banish';
+		if (tier1 > 0) OR (tier2 > 0) OR (tier3 > 0) OR (tier4 > 0) OR (tier5 > 0) OR (tier6 > 0) then
+		begin
+			sublist := createList('SublistEnch' + material + weaponType + enchType);
+			processSublist(sublist, enchType, material, weaponType);
+		end;
+		
+		if tier4 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '000ACBB7', 'Banishing', charge4), tier4);
+		if tier5 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '000ACBB8', 'Expelling', charge5), tier5);
+		if tier6 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '000ACBB9', 'Annihilating', charge6), tier6);
+		
+		// Paralyze
+		enchType := 'Paralyze';
+		if (tier1 > 0) OR (tier2 > 0) OR (tier3 > 0) OR (tier4 > 0) OR (tier5 > 0) OR (tier6 > 0) then
+		begin
+			sublist := createList('SublistEnch' + material + weaponType + enchType);
+			processSublist(sublist, enchType, material, weaponType);
+		end;
+		
+		if tier4 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '000ACBBA', 'Stunning', charge4), tier4);
+		if tier5 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '000ACBBB', 'Immobilizing', charge5), tier5);
+		if tier6 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '000ACBBC', 'Petrifying', charge6), tier6);	
+		
+		// Chaos
+		if material = 'Iron' then
+		begin
+			tier1 := 0;
+			tier2 := 0;
+			tier3 := 0;
+			tier4 := 0;
+			tier5 := 0;
+			tier6 := 0;
+			charge1 := 0;
+			charge2 := 0;
+			charge3 := 0;
+			charge4 := 0;
+			charge5 := 0;
+			charge6 := 0;
+		end
+		else if material = 'Imperial' then
+		begin
+			tier1 := 0;
+			tier2 := 0;
+			tier3 := 0;
+			tier4 := 0;
+			tier5 := 0;
+			tier6 := 0;
+			charge1 := 0;
+			charge2 := 0;
+			charge3 := 0;
+			charge4 := 0;
+			charge5 := 0;
+			charge6 := 0;
+		end
+		else if material = 'Steel' then
+		begin
+			tier1 := 0;
+			tier2 := 0;
+			tier3 := 0;
+			tier4 := 0;
+			tier5 := 0;
+			tier6 := 0;
+			charge1 := 0;
+			charge2 := 0;
+			charge3 := 0;
+			charge4 := 0;
+			charge5 := 0;
+			charge6 := 0;
+		end
+		else if material = 'Dwarven' then
+		begin
+			tier1 := 0;
+			tier2 := 0;
+			tier3 := 0;
+			tier4 := 0;
+			tier5 := 0;
+			tier6 := 0;
+			charge1 := 0;
+			charge2 := 0;
+			charge3 := 0;
+			charge4 := 0;
+			charge5 := 0;
+			charge6 := 0;
+		end
+		else if material = 'Orcish' then
+		begin
+			tier1 := 0;
+			tier2 := 0;
+			tier3 := 0;
+			tier4 := 0;
+			tier5 := 0;
+			tier6 := 0;
+			charge1 := 0;
+			charge2 := 0;
+			charge3 := 0;
+			charge4 := 0;
+			charge5 := 0;
+			charge6 := 0;
+		end
+		else if material = 'Elven' then
+		begin
+			tier1 := 0;
+			tier2 := 0;
+			tier3 := 0;
+			tier4 := 0;
+			tier5 := 0;
+			tier6 := 0;
+			charge1 := 0;
+			charge2 := 0;
+			charge3 := 0;
+			charge4 := 0;
+			charge5 := 0;
+			charge6 := 0;
+		end
+		else if material='Nordic' then
+		begin
+			tier1 := 0;
+			tier2 := 0;
+			tier3 := 20;
+			tier4 := 22;
+			tier5 := 25;
+			tier6 := 0;
+			charge1 := 0;
+			charge2 := 0;
+			charge3 := 1500;
+			charge4 := 2000;
+			charge5 := 2500;
+			charge6 := 0;
+		end
+		else if material = 'Glass' then
+		begin
+			tier1 := 0;
+			tier2 := 0;
+			tier3 := 0;
+			tier4 := 0;
+			tier5 := 0;
+			tier6 := 0;
+			charge1 := 0;
+			charge2 := 0;
+			charge3 := 0;
+			charge4 := 0;
+			charge5 := 0;
+			charge6 := 0;
+		end
+		else if material = 'Ebony' then
+		begin
+			tier1 := 0;
+			tier2 := 0;
+			tier3 := 0;
+			tier4 := 0;
+			tier5 := 0;
+			tier6 := 0;
+			charge1 := 0;
+			charge2 := 0;
+			charge3 := 0;
+			charge4 := 0;
+			charge5 := 0;
+			charge6 := 0;
+		end
+		else if material = 'Stalhrim' then
+		begin
+			tier1 := 0;
+			tier2 := 0;
+			tier3 := 0;
+			tier4 := 36;
+			tier5 := 40;
+			tier6 := 43;
+			charge1 := 0;
+			charge2 := 0;
+			charge3 := 0;
+			charge4 := 2000;
+			charge5 := 2500;
+			charge6 := 3000;
+		end
+		else if material = 'Daedric' then
+		begin
+			tier1 := 0;
+			tier2 := 0;
+			tier3 := 0;
+			tier4 := 0;
+			tier5 := 0;
+			tier6 := 0;
+			charge1 := 0;
+			charge2 := 0;
+			charge3 := 0;
+			charge4 := 0;
+			charge5 := 0;
+			charge6 := 0;
+		end;	
+		
+		enchType := 'Chaos';
+		if (tier1 > 0) OR (tier2 > 0) OR (tier3 > 0) OR (tier4 > 0) OR (tier5 > 0) OR (tier6 > 0) then
+		begin
+			sublist := createList('SublistEnch' + material + weaponType + enchType);
+			processSublist(sublist, enchType, material, weaponType);
+		end;
+		
+		if tier3 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0402C46F', 'Chaos', charge3), tier3);
+		if tier4 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0402C470', 'High Chaos', charge4), tier4);
+		if tier5 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0402C471', 'Extreme Chaos', charge5), tier5);
+		if tier6 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0402C472', 'Ultimate Chaos', charge6), tier6);
+		
+		if material = 'Iron' then
+		begin
+			tier1 := 1;
+			tier2 := 4;
+			tier3 := 6;
+			tier4 := 0;
+			tier5 := 0;
+			tier6 := 0;
+			charge1 := 500;
+			charge2 := 1000;
+			charge3 := 1500;
+			charge4 := 0;
+			charge5 := 0;
+			charge6 := 0;
+		end
+		else if material = 'Imperial' then
+		begin
+			tier1 := 4;
+			tier2 := 6;
+			tier3 := 8;
+			tier4 := 0;
+			tier5 := 0;
+			tier6 := 0;
+			charge1 := 200;
+			charge2 := 300;
+			charge3 := 400;
+			charge4 := 0;
+			charge5 := 0;
+			charge6 := 0;
+		end
+		else if material = 'Steel' then
+		begin
+			tier1 := 4;
+			tier2 := 6;
+			tier3 := 8;
+			tier4 := 0;
+			tier5 := 0;
+			tier6 := 0;
+			charge1 := 500;
+			charge2 := 1000;
+			charge3 := 15000;
+			charge4 := 0;
+			charge5 := 0;
+			charge6 := 0;
+		end
+		else if material = 'Dwarven' then
+		begin
+			tier1 := 0;
+			tier2 := 13;
+			tier3 := 15;
+			tier4 := 17;
+			tier5 := 0;
+			tier6 := 0;
+			charge1 := 0;
+			charge2 := 1000;
+			charge3 := 1500;
+			charge4 := 2000;
+			charge5 := 0;
+			charge6 := 0;
+		end
+		else if material = 'Orcish' then
+		begin
+			tier1 := 0;
+			tier2 := 7;
+			tier3 := 9;
+			tier4 := 11;
+			tier5 := 0;
+			tier6 := 0;
+			charge1 := 0;
+			charge2 := 1000;
+			charge3 := 1500;
+			charge4 := 2000;
+			charge5 := 0;
+			charge6 := 0;
+		end
+		else if (material = 'Elven') OR (material='Nordic') then
+		begin
+			tier1 := 0;
+			tier2 := 0;
+			tier3 := 20;
+			tier4 := 22;
+			tier5 := 25;
+			tier6 := 0;
+			charge1 := 0;
+			charge2 := 0;
+			charge3 := 1500;
+			charge4 := 2000;
+			charge5 := 2500;
+			charge6 := 0;
+		end
+		else if material = 'Glass' then
+		begin
+			tier1 := 0;
+			tier2 := 0;
+			tier3 := 28;
+			tier4 := 31;
+			tier5 := 34;
+			tier6 := 0;
+			charge1 := 0;
+			charge2 := 0;
+			charge3 := 1500;
+			charge4 := 2000;
+			charge5 := 2500;
+			charge6 := 0;
+		end
+		else if (material = 'Stalhrim') then
+		begin
+			tier1 := 0;
+			tier2 := 0;
+			tier3 := 0;
+			tier4 := 36;
+			tier5 := 40;
+			tier6 := 43;
+			charge1 := 0;
+			charge2 := 0;
+			charge3 := 0;
+			charge4 := 2000;
+			charge5 := 2500;
+			charge6 := 3000;
+		end
+		else if (material = 'Ebony') then
+		begin
+			tier1 := 0;
+			tier2 := 0;
+			tier3 := 0;
+			tier4 := 37;
+			tier5 := 40;
+			tier6 := 43;
+			charge1 := 0;
+			charge2 := 0;
+			charge3 := 0;
+			charge4 := 2000;
+			charge5 := 2500;
+			charge6 := 3000;
+		end
+		else if material = 'Daedric' then
+		begin
+			tier1 := 0;
+			tier2 := 0;
+			tier3 := 0;
+			tier4 := 47;
+			tier5 := 50;
+			tier6 := 53;
+			charge1 := 0;
+			charge2 := 0;
+			charge3 := 0;
+			charge4 := 2000;
+			charge5 := 2500;
+			charge6 := 3000;
+		end;
+
+		if (waccf = true) then
+		begin
+			if material = 'Elven' then
+			begin
+				tier1 := 0;
+				tier2 := 13;
+				tier3 := 15;
+				tier4 := 17;
+				tier5 := 0;
+				tier6 := 0;
+				charge1 := 0;
+				charge2 := 1000;
+				charge3 := 1500;
+				charge4 := 2000;
+				charge5 := 0;
+				charge6 := 0;
+			end
+			else if material = 'Dwarven' then
+			begin
+				tier1 := 0;
+				tier2 := 7;
+				tier3 := 9;
+				tier4 := 11;
+				tier5 := 0;
+				tier6 := 0;
+				charge1 := 0;
+				charge2 := 1000;
+				charge3 := 1500;
+				charge4 := 2000;
+				charge5 := 0;
+				charge6 := 0;
+			end
+			else if (material = 'Orcish') then
+			begin
+				tier1 := 0;
+				tier2 := 0;
+				tier3 := 20;
+				tier4 := 22;
+				tier5 := 25;
+				tier6 := 0;
+				charge1 := 0;
+				charge2 := 0;
+				charge3 := 1500;
+				charge4 := 2000;
+				charge5 := 2500;
+				charge6 := 0;
+			end
+		end;
+		
+		// Fear
+		enchType := 'Fear';
+		if (tier1 > 0) OR (tier2 > 0) OR (tier3 > 0) OR (tier4 > 0) OR (tier5 > 0) OR (tier6 > 0) then
+		begin
+			sublist := createList('SublistEnch' + material + weaponType + enchType);
+			processSublist(sublist, enchType, material, weaponType);
+		end;
+		
+		if tier1 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '000FBFF7', 'Dismay', charge1), tier1);
+		if tier2 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0005B466', 'Cowardice', charge2), tier2);
+		if tier3 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0005B467', 'Fear', charge3), tier3);
+		if tier4 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0005B468', 'Despair', charge4), tier4);
+		if tier5 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0005B469', 'Dread', charge5), tier5);
+		if tier6 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0005B46A', 'Terror', charge6), tier6);
+		
+		// Fire
+		enchType := 'Fire';
+		if (tier1 > 0) OR (tier2 > 0) OR (tier3 > 0) OR (tier4 > 0) OR (tier5 > 0) OR (tier6 > 0) then
+		begin
+			sublist := createList('SublistEnch' + material + weaponType + enchType);
+			processSublist(sublist, enchType, material, weaponType);
+		end;
+		
+		if tier1 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '00049BB7', 'Embers', charge1), tier1);
+		if tier2 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '00045C2A', 'Burning', charge2), tier2);
+		if tier3 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '00045C2C', 'Scorching', charge3), tier3);
+		if tier4 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '00045C2D', 'Flames', charge4), tier4);
+		if tier5 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '00045C30', 'the Blaze', charge5), tier5);
+		if tier6 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '00045C35', 'the Inferno', charge6), tier6);
+		
+		// Frost
+		enchType := 'Frost';
+		if (tier1 > 0) OR (tier2 > 0) OR (tier3 > 0) OR (tier4 > 0) OR (tier5 > 0) OR (tier6 > 0) then
+		begin
+			sublist := createList('SublistEnch' + material + weaponType + enchType);
+			processSublist(sublist, enchType, material, weaponType);
+		end;
+		
+		if tier1 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '00045C36', 'Chills', charge1), tier1);
+		if tier2 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '00045C37', 'Frost', charge2), tier2);
+		if tier3 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '00045C39', 'Ice', charge3), tier3);
+		if tier4 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '00045D4B', 'Freezing', charge4), tier4);
+		if tier5 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '00045D56', 'Blizzards', charge5), tier5);
+		if tier6 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '00045D58', 'Winter', charge6), tier6);
+		
+		// Magicka Damage
+		enchType := 'Magica';
+		if (tier1 > 0) OR (tier2 > 0) OR (tier3 > 0) OR (tier4 > 0) OR (tier5 > 0) OR (tier6 > 0) then
+		begin
+			sublist := createList('SublistEnch' + material + weaponType + enchType);
+			processSublist(sublist, enchType, material, weaponType);
+		end;
+		
+		if tier1 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0005B453', 'Sapping', charge1), tier1);
+		if tier2 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0005B454', 'Draining', charge2), tier2);
+		if tier3 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0005B455', 'Diminishing', charge3), tier3);
+		if tier4 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0005B456', 'Depleting', charge4), tier4);
+		if tier5 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0005B457', 'Enervating', charge5), tier5);
+		if tier6 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0005B458', 'Nullifying', charge6), tier6);	
+		
+		// Shock		
+		enchType := 'Shock';
+		if (tier1 > 0) OR (tier2 > 0) OR (tier3 > 0) OR (tier4 > 0) OR (tier5 > 0) OR (tier6 > 0) then
+		begin
+			sublist := createList('SublistEnch' + material + weaponType + enchType);
+			processSublist(sublist, enchType, material, weaponType);
+		end;
+		
+		
+		if tier1 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '00045D59', 'Sparks', charge1), tier1); 
+		if tier2 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '00045D97', 'Arcing', charge2), tier2); 
+		if tier3 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '00045F6F', 'Shocks', charge3), tier3); 
+		if tier4 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '00045F89', 'Thunderbolts', charge4), tier4); 
+		if tier5 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '00045F8D', 'Lightning', charge5), tier5); 
+		if tier6 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '00045F9E', 'Storms', charge6), tier6);
+		
+		// Soul Trap
+		enchType := 'SoulTrap';
+		if (tier1 > 0) OR (tier2 > 0) OR (tier3 > 0) OR (tier4 > 0) OR (tier5 > 0) OR (tier6 > 0) then
+		begin
+			sublist := createList('SublistEnch' + material + weaponType + enchType);
+			processSublist(sublist, enchType, material, weaponType);
+		end;
+		
+		if tier1 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0005B45F', 'Souls', charge1), tier1);
+		if tier2 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0005B460', 'Soul Snares', charge2), tier2); 
+		if tier3 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0005B461', 'Binding', charge3), tier3);
+		if tier4 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0005B462', 'Animus', charge4), tier4);
+		if tier5 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0005B463', 'Malediction', charge5), tier5);
+		if tier6 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0005B464', 'Damnation', charge6), tier6);
+		
+		// Stamina Damage
+		enchType := 'Stamina';
+		if (tier1 > 0) OR (tier2 > 0) OR (tier3 > 0) OR (tier4 > 0) OR (tier5 > 0) OR (tier6 > 0) then
+		begin
+			sublist := createList('SublistEnch' + material + weaponType + enchType);
+			processSublist(sublist, enchType, material, weaponType);
+		end;
+		
+		if tier1 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0005B459', 'Fatigue', charge1), tier1);
+		if tier2 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0005B45A', 'Weariness', charge2), tier2);
+		if tier3 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0005B45B', 'Torpor', charge3), tier3);
+		if tier4 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0005B45C', 'Debilitation', charge4), tier4);
+		if tier5 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0005B45D', 'Lethargy', charge5), tier5);
+		if tier6 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0005B45E', 'Exhaustion', charge6), tier6);
+		
+		// Turn Undead
+		enchType := 'Turn';
+		if (tier1 > 0) OR (tier2 > 0) OR (tier3 > 0) OR (tier4 > 0) OR (tier5 > 0) OR (tier6 > 0) then
+		begin
+			sublist := createList('SublistEnch' + material + weaponType + enchType);
+			processSublist(sublist, enchType, material, weaponType);
+		end;
+		
+		if tier1 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0005B46C', 'Blessed', charge1), tier1);
+		if tier2 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0005B46D', 'Sanctified', charge2), tier2); 
+		if tier3 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0005B46E', 'Reverent', charge3), tier3);
+		if tier4 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0005B46F', 'Hallowed', charge4), tier4);
+		if tier5 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '0005B470', 'Virtuous', charge5), tier5);
+		if tier6 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, '000BF3F5', 'Holy', charge6), tier6);
+		
+		
+		
+		{
+			if material = 'Iron' then
+			begin
+			tier1 := ;
+			tier2 := ;
+			tier3 := ;
+			tier4 =;
+			tier5 := ;
+			tier6 := ;
+			charge1 := ;
+			charge2 := ;
+			charge3 := ;
+			charge4 := ;
+			charge5 := ;
+			charge6 := ;
+			end
+			else if material = 'Imperial' then
+			begin
+			tier1 := ;
+			tier2 := ;
+			tier3 := ;
+			tier4 =;
+			tier5 := ;
+			tier6 := ;
+			charge1 := ;
+			charge2 := ;
+			charge3 := ;
+			charge4 := ;
+			charge5 := ;
+			charge6 := ;
+			end
+			else if material = 'Steel' then
+			begin
+			tier1 := ;
+			tier2 := ;
+			tier3 := ;
+			tier4 =;
+			tier5 := ;
+			tier6 := ;
+			charge1 := ;
+			charge2 := ;
+			charge3 := ;
+			charge4 := ;
+			charge5 := ;
+			charge6 := ;
+			end
+			else if material = 'Dwarven' then
+			begin
+			tier1 := ;
+			tier2 := ;
+			tier3 := ;
+			tier4 =;
+			tier5 := ;
+			tier6 := ;
+			charge1 := ;
+			charge2 := ;
+			charge3 := ;
+			charge4 := ;
+			charge5 := ;
+			charge6 := ;
+			end
+			else if material = 'Orcish' then
+			begin
+			tier1 := ;
+			tier2 := ;
+			tier3 := ;
+			tier4 =;
+			tier5 := ;
+			tier6 := ;
+			charge1 := ;
+			charge2 := ;
+			charge3 := ;
+			charge4 := ;
+			charge5 := ;
+			charge6 := ;
+			end
+			else if (material = 'Elven') OR (material='Nordic') then
+			begin
+			tier1 := ;
+			tier2 := ;
+			tier3 := ;
+			tier4 =;
+			tier5 := ;
+			tier6 := ;
+			charge1 := ;
+			charge2 := ;
+			charge3 := ;
+			charge4 := ;
+			charge5 := ;
+			charge6 := ;
+			end
+			else if material = 'Glass' then
+			begin
+			tier1 := ;
+			tier2 := ;
+			tier3 := ;
+			tier4 =;
+			tier5 := ;
+			tier6 := ;
+			charge1 := ;
+			charge2 := ;
+			charge3 := ;
+			charge4 := ;
+			charge5 := ;
+			charge6 := ;
+			end
+			else if (material = 'Ebony') OR (material = 'Stalhrim') then
+			begin
+			tier1 := ;
+			tier2 := ;
+			tier3 := ;
+			tier4 =;
+			tier5 := ;
+			tier6 := ;
+			charge1 := ;
+			charge2 := ;
+			charge3 := ;
+			charge4 := ;
+			charge5 := ;
+			charge6 := ;
+			end
+			else if material = 'Daedric' then
+			begin
+			tier1 := ;
+			tier2 := ;
+			tier3 := ;
+			tier4 =;
+			tier5 := ;
+			tier6 := ;
+			charge1 := ;
+			charge2 := ;
+			charge3 := ;
+			charge4 := ;
+			charge5 := ;
+			charge6 := ;
+			end
+			else if (material = 'Draugr') OR (material = 'DraugrHoned')then
+			begin
+			tier1 := 0;
+			tier2 := 0;
+			tier3 := 0;
+			tier4 := 0;
+			tier5 := 0;
+			tier6 := 0;
+			charge1 := 0;
+			charge2 := 0;
+			charge3 := 0;
+			charge4 := 0;
+			charge5 := 0;
+			charge6 := 0;
+			end
+			else if (material = 'Falmer') OR (material = 'FalmerHoned') then
+			begin
+			tier1 := ;
+			tier2 := ;
+			tier3 := ;
+			tier4 =;
+			tier5 := ;
+			tier6 := ;
+			charge1 := ;
+			charge2 := ;
+			charge3 := ;
+			charge4 := ;
+			charge5 := ;
+			charge6 := ;
+			end
+			else if material = 'Dragonbone' then
+			begin
+			tier1 := ;
+			tier2 := ;
+			tier3 := ;
+			tier4 =;
+			tier5 := ;
+			tier6 := ;
+			charge1 := ;
+			charge2 := ;
+			charge3 := ;
+			charge4 := ;
+			charge5 := ;
+			charge6 := ;
+			end
+		}
+	end;
+	
+
+	// Create LItem list structure and add to vanilla lists
+	createLItemLists(material, weaponType);
+
 	end else if recordSignature = 'ARMO' then begin
 	SetElementEditValues(enchLevelList, 'EDID', 'LItemArmorEnch' + GetElementEditValues(selectedRecord, 'EDID'));
 	
