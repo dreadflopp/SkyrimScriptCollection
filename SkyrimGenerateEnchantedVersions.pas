@@ -768,13 +768,20 @@ begin
 	material := getMainMaterialShort(selectedRecord);
 
 	if (material = 'Blades') OR (material = 'Draugr') OR (material = 'DraugrHoned') OR (material = 'Dawnguard') OR (material = 'Falmer') OR (material = 'FalmerHoned') OR (material = 'Forsworn') OR (material = 'Redguard') OR (material = 'Silver') OR (material = 'Skyforge') OR (material = 'Imperial') OR (material = 'Dragonbone') OR (material = 'Skip_ench') then
-	Exit;	
+	Exit;
+
+	charge1 := 500;
+	charge2 := 1000;
+	charge3 := 1500;
+	charge4 := 2000;
+	charge5 := 2500;
+	charge6 := 3000;
 
 	if (summermyst = true) then
 	begin
 		allWeaponTypes.Add(weaponType);
-
-		// Absorb Armor		
+		
+		// Weapons added to Absorb Stamina lists
 		if material = 'Iron' then
 		begin
 			tier1 := 0;
@@ -783,12 +790,6 @@ begin
 			tier4 := 0;
 			tier5 := 0;
 			tier6 := 0;
-			charge1 := 0;
-			charge2 := 0;
-			charge3 := 0;
-			charge4 := 0;
-			charge5 := 0;
-			charge6 := 0;
 		end
 		else if material = 'Imperial' then
 		begin
@@ -798,12 +799,6 @@ begin
 			tier4 := 0;
 			tier5 := 0;
 			tier6 := 0;
-			charge1 := 0;
-			charge2 := 0;
-			charge3 := 0;
-			charge4 := 0;
-			charge5 := 0;
-			charge6 := 0;
 		end
 		else if material = 'Steel' then
 		begin
@@ -813,12 +808,6 @@ begin
 			tier4 := 0;
 			tier5 := 0;
 			tier6 := 0;
-			charge1 := 0;
-			charge2 := 0;
-			charge3 := 0;
-			charge4 := 0;
-			charge5 := 0;
-			charge6 := 0;
 		end
 		else if material = 'Dwarven' then
 		begin
@@ -828,12 +817,6 @@ begin
 			tier4 := 17;
 			tier5 := 0;
 			tier6 := 0;
-			charge1 := 0;
-			charge2 := 1000;
-			charge3 := 1500;
-			charge4 := 2000;
-			charge5 := 0;
-			charge6 := 0;
 		end
 		else if material = 'Orcish' then
 		begin
@@ -843,12 +826,6 @@ begin
 			tier4 := 11;
 			tier5 := 0;
 			tier6 := 0;
-			charge1 := 0;
-			charge2 := 1000;
-			charge3 := 1500;
-			charge4 := 2000;
-			charge5 := 0;
-			charge6 := 0;
 		end
 		else if (material = 'Elven') OR (material='Nordic') then
 		begin
@@ -858,12 +835,6 @@ begin
 			tier4 := 22;
 			tier5 := 25;
 			tier6 := 0;
-			charge1 := 0;
-			charge2 := 0;
-			charge3 := 1500;
-			charge4 := 2000;
-			charge5 := 2500;
-			charge6 := 0;
 		end	
 		else if material = 'Glass' then
 		begin
@@ -873,12 +844,6 @@ begin
 			tier4 := 31;
 			tier5 := 34;
 			tier6 := 0;
-			charge1 := 0;
-			charge2 := 0;
-			charge3 := 1500;
-			charge4 := 2000;
-			charge5 := 2500;
-			charge6 := 0;
 		end
 		else if (material = 'Stalhrim') then
 		begin
@@ -888,13 +853,6 @@ begin
 			tier4 := 36;
 			tier5 := 40;
 			tier6 := 43;
-			charge1 := 0;
-			charge2 := 0;
-			charge3 := 0;
-			charge4 := 2000;
-			charge5 := 2500;
-			charge6 := 3000;
-		end
 		else if (material = 'Ebony') then
 		begin
 			tier1 := 0;
@@ -903,12 +861,6 @@ begin
 			tier4 := 37;
 			tier5 := 40;
 			tier6 := 43;
-			charge1 := 0;
-			charge2 := 0;
-			charge3 := 0;
-			charge4 := 2000;
-			charge5 := 2500;
-			charge6 := 3000;
 		end
 		else if material = 'Daedric' then
 		begin
@@ -918,12 +870,6 @@ begin
 			tier4 := 47;
 			tier5 := 50;
 			tier6 := 53;
-			charge1 := 0;
-			charge2 := 0;
-			charge3 := 0;
-			charge4 := 2000;
-			charge5 := 2500;
-			charge6 := 3000;
 		end;
 
 		enchType := 'AbsorbArmor';
@@ -939,7 +885,46 @@ begin
 		if tier5 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '051120', 'Electroplating', charge5), tier5);
 		if tier6 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '051121', 'Galvanization', charge6), tier6);
 
-		// Absorb Speed
+		enchType := 'Balefire';
+		if (tier1 > 0) OR (tier2 > 0) OR (tier3 > 0) OR (tier4 > 0) OR (tier5 > 0) OR (tier6 > 0) then
+		begin
+			sublist := createList('SublistEnch' + material + weaponType + enchType);
+			processSublist(sublist, enchType, material, weaponType);
+		end;
+		
+		if tier2 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '0513F9', 'Balefire', charge2), tier2);
+		if tier3 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '0513FA', 'Hellfire', charge3), tier3);
+		if tier4 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '0513FB', 'Abaddon', charge4), tier4);
+		if tier5 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '0513FC', 'Blackfire', charge5), tier5);
+		if tier6 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '0513FD', 'the Pit', charge6), tier6);
+
+		enchType := 'IllusoryBurden';
+		if (tier1 > 0) OR (tier2 > 0) OR (tier3 > 0) OR (tier4 > 0) OR (tier5 > 0) OR (tier6 > 0) then
+		begin
+			sublist := createList('SublistEnch' + material + weaponType + enchType);
+			processSublist(sublist, enchType, material, weaponType);
+		end;
+		
+		if tier2 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '0511A8', 'Burdens', charge2), tier2);
+		if tier3 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '0511A9', 'Weight', charge3), tier3);
+		if tier4 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '0511AA', 'Encumbrance', charge4), tier4);
+		if tier5 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '0511AB', 'Ballast', charge5), tier5);
+		if tier6 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '0511AC', 'Mass', charge6), tier6);
+
+		enchType := 'Beaconbound';
+		if (tier1 > 0) OR (tier2 > 0) OR (tier3 > 0) OR (tier4 > 0) OR (tier5 > 0) OR (tier6 > 0) then
+		begin
+			sublist := createList('SublistEnch' + material + weaponType + enchType);
+			processSublist(sublist, enchType, material, weaponType);
+		end;
+		
+		if tier2 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '05143D', 'Azura', charge2), tier2);
+		if tier3 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '051440', 'Greybeards', charge3), tier3);
+		if tier4 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '051441', 'Labyrinthian', charge4), tier4);
+		if tier5 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '051436', 'Winterhold', charge5), tier5);
+		if tier6 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '05143C', 'Energies', charge6), tier6);
+			
+		// Weapons added to paralyze
 		if material = 'Iron' then
 		begin
 			tier1 := 0;
@@ -948,12 +933,6 @@ begin
 			tier4 := 0;
 			tier5 := 0;
 			tier6 := 0;
-			charge1 := 0;
-			charge2 := 0;
-			charge3 := 0;
-			charge4 := 0;
-			charge5 := 0;
-			charge6 := 0;
 		end
 		else if material = 'Imperial' then
 		begin
@@ -963,12 +942,6 @@ begin
 			tier4 := 0;
 			tier5 := 0;
 			tier6 := 0;
-			charge1 := 0;
-			charge2 := 0;
-			charge3 := 0;
-			charge4 := 0;
-			charge5 := 0;
-			charge6 := 0;
 		end
 		else if material = 'Steel' then
 		begin
@@ -978,12 +951,6 @@ begin
 			tier4 := 0;
 			tier5 := 0;
 			tier6 := 0;
-			charge1 := 0;
-			charge2 := 0;
-			charge3 := 0;
-			charge4 := 0;
-			charge5 := 0;
-			charge6 := 0;
 		end
 		else if material = 'Dwarven' then
 		begin
@@ -993,12 +960,6 @@ begin
 			tier4 := 0;
 			tier5 := 0;
 			tier6 := 0;
-			charge1 := 0;
-			charge2 := 1000;
-			charge3 := 1500;
-			charge4 := 2000;
-			charge5 := 0;
-			charge6 := 0;
 		end
 		else if material = 'Orcish' then
 		begin
@@ -1008,12 +969,6 @@ begin
 			tier4 := 0;
 			tier5 := 0;
 			tier6 := 0;
-			charge1 := 0;
-			charge2 := 1000;
-			charge3 := 1500;
-			charge4 := 2000;
-			charge5 := 0;
-			charge6 := 0;
 		end
 		else if (material = 'Elven') OR (material='Nordic') then
 		begin
@@ -1023,12 +978,6 @@ begin
 			tier4 := 22;
 			tier5 := 25;
 			tier6 := 0;
-			charge1 := 0;
-			charge2 := 0;
-			charge3 := 1500;
-			charge4 := 2000;
-			charge5 := 2500;
-			charge6 := 0;
 		end	
 		else if material = 'Glass' then
 		begin
@@ -1038,12 +987,6 @@ begin
 			tier4 := 31;
 			tier5 := 34;
 			tier6 := 0;
-			charge1 := 0;
-			charge2 := 0;
-			charge3 := 1500;
-			charge4 := 2000;
-			charge5 := 2500;
-			charge6 := 0;
 		end
 		else if (material = 'Stalhrim') then
 		begin
@@ -1053,12 +996,6 @@ begin
 			tier4 := 36;
 			tier5 := 40;
 			tier6 := 43;
-			charge1 := 0;
-			charge2 := 0;
-			charge3 := 0;
-			charge4 := 2000;
-			charge5 := 2500;
-			charge6 := 3000;
 		end
 		else if (material = 'Ebony') then
 		begin
@@ -1068,12 +1005,6 @@ begin
 			tier4 := 37;
 			tier5 := 40;
 			tier6 := 43;
-			charge1 := 0;
-			charge2 := 0;
-			charge3 := 0;
-			charge4 := 2000;
-			charge5 := 2500;
-			charge6 := 3000;
 		end
 		else if material = 'Daedric' then
 		begin
@@ -1083,12 +1014,6 @@ begin
 			tier4 := 47;
 			tier5 := 50;
 			tier6 := 53;
-			charge1 := 0;
-			charge2 := 0;
-			charge3 := 0;
-			charge4 := 2000;
-			charge5 := 2500;
-			charge6 := 3000;
 		end;
 
 		enchType := 'AbsorbSpeed';
@@ -1098,20 +1023,205 @@ begin
 			processSublist(sublist, enchType, material, weaponType);
 		end;
 		
-		if tier2 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '0510DD', 'Electrolysis', charge2), tier2);
-		if tier3 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '0510DD', 'Chrome', charge3), tier3);
-		if tier4 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '05111F', 'Anodization', charge4), tier4);
-		if tier5 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '051120', 'Electroplating', charge5), tier5);
-		if tier6 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '051121', 'Galvanization', charge6), tier6);
+		if tier4 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '051119', 'Cunning', charge4), tier4);
+		if tier5 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '05111B', 'Wile', charge5), tier5);
+		if tier6 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '051121', 'Mischief', charge6), tier6);
+
+		enchType := 'DrainMagicResist';
+		if (tier1 > 0) OR (tier2 > 0) OR (tier3 > 0) OR (tier4 > 0) OR (tier5 > 0) OR (tier6 > 0) then
+		begin
+			sublist := createList('SublistEnch' + material + weaponType + enchType);
+			processSublist(sublist, enchType, material, weaponType);
+		end;
+		
+		if tier4 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '05111C', 'Razing', charge4), tier4);
+		if tier5 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '05111D', 'Subjugation', charge5), tier5);
+		if tier6 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '05111E', 'Oppression', charge6), tier6);
+
+		enchType := 'StealWeapon';
+		if (tier1 > 0) OR (tier2 > 0) OR (tier3 > 0) OR (tier4 > 0) OR (tier5 > 0) OR (tier6 > 0) then
+		begin
+			sublist := createList('SublistEnch' + material + weaponType + enchType);
+			processSublist(sublist, enchType, material, weaponType);
+		end;
+		
+		if tier4 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '051195', 'Grappling', charge4), tier4);
+		if tier5 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '051196', 'Hooks', charge5), tier5);
+		if tier6 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '051197', 'Snatching', charge6), tier6);
+
+		enchType := 'HiddenSerpent';
+		if (tier1 > 0) OR (tier2 > 0) OR (tier3 > 0) OR (tier4 > 0) OR (tier5 > 0) OR (tier6 > 0) then
+		begin
+			sublist := createList('SublistEnch' + material + weaponType + enchType);
+			processSublist(sublist, enchType, material, weaponType);
+		end;
+		
+		if tier4 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '0511C5', 'Vipers', charge4), tier4);
+		if tier5 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '0511C6', 'Adders', charge5), tier5);
+		if tier6 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '0511C7', 'Asps', charge6), tier6);
+
+		enchType := 'Heal';
+		if (tier1 > 0) OR (tier2 > 0) OR (tier3 > 0) OR (tier4 > 0) OR (tier5 > 0) OR (tier6 > 0) then
+		begin
+			sublist := createList('SublistEnch' + material + weaponType + enchType);
+			processSublist(sublist, enchType, material, weaponType);
+		end;
+		
+		if tier4 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '05110C', 'Healing', charge4), tier4);
+		if tier5 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '05110D', 'Mercy', charge5), tier5);
+		if tier6 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '05110E', 'Compassion', charge6), tier6);		
+
+		
+
+		// Weapons added to stamina
+		if material = 'Iron' then
+		begin
+			tier1 := 1;
+			tier2 := 4;
+			tier3 := 6;
+			tier4 := 0;
+			tier5 := 0;
+			tier6 := 0;
+		end
+		else if material = 'Imperial' then
+		begin
+			tier1 := 0;
+			tier2 := 0;
+			tier3 := 0;
+			tier4 := 0;
+			tier5 := 0;
+			tier6 := 0;
+		end
+		else if material = 'Steel' then
+		begin
+			tier1 := 4;
+			tier2 := 6;
+			tier3 := 8;
+			tier4 := 0;
+			tier5 := 0;
+			tier6 := 0;
+		end
+		else if material = 'Dwarven' then
+		begin
+			tier1 := 0;
+			tier2 := 13;
+			tier3 := 15;
+			tier4 := 17;
+			tier5 := 0;
+			tier6 := 0;
+		end
+		else if material = 'Orcish' then
+		begin
+			tier1 := 0;
+			tier2 := 7;
+			tier3 := 9;
+			tier4 := 11;
+			tier5 := 0;
+			tier6 := 0;
+		end
+		else if (material = 'Elven') OR (material='Nordic') then
+		begin
+			tier1 := 0;
+			tier2 := 0;
+			tier3 := 20;
+			tier4 := 22;
+			tier5 := 25;
+			tier6 := 0;
+		end	
+		else if material = 'Glass' then
+		begin
+			tier1 := 0;
+			tier2 := 0;
+			tier3 := 28;
+			tier4 := 31;
+			tier5 := 34;
+			tier6 := 0;
+		end
+		else if (material = 'Stalhrim') then
+		begin
+			tier1 := 0;
+			tier2 := 0;
+			tier3 := 0;
+			tier4 := 36;
+			tier5 := 40;
+			tier6 := 43;
+		end
+		else if (material = 'Ebony') then
+		begin
+			tier1 := 0;
+			tier2 := 0;
+			tier3 := 0;
+			tier4 := 37;
+			tier5 := 40;
+			tier6 := 43;
+		end
+		else if material = 'Daedric' then
+		begin
+			tier1 := 0;
+			tier2 := 0;
+			tier3 := 0;
+			tier4 := 47;
+			tier5 := 50;
+			tier6 := 53;
+		end;
+
+		enchType := 'DrainArmor';
+		if (tier1 > 0) OR (tier2 > 0) OR (tier3 > 0) OR (tier4 > 0) OR (tier5 > 0) OR (tier6 > 0) then
+		begin
+			sublist := createList('SublistEnch' + material + weaponType + enchType);
+			processSublist(sublist, enchType, material, weaponType);
+		end;
+		
+		if tier1 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '0513E4', 'Denting', charge2), tier2);
+		if tier2 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '05118F', 'Crushing', charge2), tier2);
+		if tier3 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '051190', 'Bending', charge3), tier3);
+		if tier4 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '051191', 'Buckling', charge4), tier4);
+		if tier5 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '051192', 'Crumpling', charge5), tier5);
+		if tier6 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '051193', 'Dismantling', charge6), tier6);
+
+		enchType := 'BattleHunger';
+		if (tier1 > 0) OR (tier2 > 0) OR (tier3 > 0) OR (tier4 > 0) OR (tier5 > 0) OR (tier6 > 0) then
+		begin
+			sublist := createList('SublistEnch' + material + weaponType + enchType);
+			processSublist(sublist, enchType, material, weaponType);
+		end;
+		
+		if tier1 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '0511F5', 'Anger', charge2), tier2);
+		if tier2 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '0511F6', 'Ire', charge2), tier2);
+		if tier3 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '0511F7', 'Jinxes', charge3), tier3);
+		if tier4 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '0511F8', 'Curses', charge4), tier4);
+		if tier5 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '0511F9', 'Hexes', charge5), tier5);
+		if tier6 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '0511FA', 'Hate', charge6), tier6);
+
+		enchType := 'Momentum';
+		if (tier1 > 0) OR (tier2 > 0) OR (tier3 > 0) OR (tier4 > 0) OR (tier5 > 0) OR (tier6 > 0) then
+		begin
+			sublist := createList('SublistEnch' + material + weaponType + enchType);
+			processSublist(sublist, enchType, material, weaponType);
+		end;
+		
+		if tier1 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '051222', 'Momentum', charge2), tier2);
+		if tier2 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '051223', 'Dominance', charge2), tier2);
+		if tier3 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '051224', 'Authority', charge3), tier3);
+		if tier4 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '051225', 'Superiority', charge4), tier4);
+		if tier5 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '051226', 'Repression', charge5), tier5);
+		if tier6 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '051227', 'Supremacy', charge6), tier6);
+
+		enchType := 'HaltRegen';
+		if (tier1 > 0) OR (tier2 > 0) OR (tier3 > 0) OR (tier4 > 0) OR (tier5 > 0) OR (tier6 > 0) then
+		begin
+			sublist := createList('SublistEnch' + material + weaponType + enchType);
+			processSublist(sublist, enchType, material, weaponType);
+		end;
+		
+		if tier1 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '05116F', 'Dying', charge2), tier2);
+		if tier2 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '05116C', 'Wasting', charge2), tier2);
+		if tier3 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '05116D', 'Withering', charge3), tier3);
+		if tier4 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '05116E', 'Wilting', charge4), tier4);
+		if tier5 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '0513E9', 'Atrophy', charge5), tier5);
+		if tier6 > 0 then addToLeveledList(sublist, createEnchantedVersion(selectedRecord, summermyst_index + '0513EA', 'Putrefaction', charge6), tier6);		
 
 	end;
-
-	charge1 := 500;
-	charge2 := 1000;
-	charge3 := 1500;
-	charge4 := 2000;
-	charge5 := 2500;
-	charge6 := 3000;
 
 	if (vanilla = true) then
 	begin
