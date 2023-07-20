@@ -1,4 +1,4 @@
-# PerkDescriptuinPatcher
+# PerkDescriptionsPatcher
 Patches perk mods. Replaces text in the perk descriptions with new text. All keywords that are added to originTexts are replaced by the ones in newTexts. Add new ones if need to automatically patch perk mods. The first entry in originTexts are replaced by the first one in newTexts, and so on. Change:
 	createNewFile = true;
 	capitalize = true
